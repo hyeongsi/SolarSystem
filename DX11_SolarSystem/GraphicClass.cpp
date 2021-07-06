@@ -154,7 +154,7 @@ HRESULT GraphicClass::InitGraphicClass()
 
 	ID3DBlob* pVSBlob = NULL;
 	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
-	wchar_t szfileName[20] = L"Tutorial06.fx";
+	wchar_t szfileName[20] = L"temp.fx";
 	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "VS", "vs_4_0", dwShaderFlags, 0, NULL, &pVSBlob, NULL, NULL);
 	if (FAILED(hr))
 	{
@@ -173,7 +173,7 @@ HRESULT GraphicClass::InitGraphicClass()
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT numElements = ARRAYSIZE(layout);
 
@@ -186,7 +186,7 @@ HRESULT GraphicClass::InitGraphicClass()
 	m_pImmediateContext->IASetInputLayout(m_pVertexLayout);
 
 	ID3DBlob* pPSBlob = NULL;
-	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "PS", "ps_4_0", dwShaderFlags, 0, NULL, &pVSBlob, NULL, NULL);
+	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "PS", "ps_4_0", dwShaderFlags, 0, NULL, &pPSBlob, NULL, NULL);
 	if (FAILED(hr))
 	{
 		MessageBox(NULL,
@@ -218,5 +218,9 @@ void GraphicClass::Update()
 
 void GraphicClass::Render()
 {
+	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
+	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, ClearColor);
+	m_pImmediateContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
+	m_pSwapChain->Present(0, 0);
 }

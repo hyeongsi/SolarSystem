@@ -13,6 +13,7 @@ HRESULT CameraClass::Init(const float width, const float height,
 	coordinateConstantBuffer.mProjection = XMMatrixPerspectiveFovLH(XM_PIDIV2, width / (FLOAT)height, 0.01f, 100.0f);
 
 	D3D11_BUFFER_DESC bufferDesc;
+	ZeroMemory(&bufferDesc, sizeof(bufferDesc));
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	bufferDesc.ByteWidth = sizeof(ConstantBuffer);
 	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -29,10 +30,10 @@ ConstantBuffer* CameraClass::GetCoordinateConstantBuffer()
 
 void CameraClass::Update()
 {
-	static ConstantBuffer constantBufferData;
-	constantBufferData.mWorld = XMMatrixTranspose(coordinateConstantBuffer.mWorld);
-	constantBufferData.mView = XMMatrixTranspose(coordinateConstantBuffer.mView);
-	constantBufferData.mProjection = XMMatrixTranspose(coordinateConstantBuffer.mProjection);
+	ConstantBuffer constantBufferData;
+	constantBufferData.mWorld = coordinateConstantBuffer.mWorld;
+	constantBufferData.mView = coordinateConstantBuffer.mView;
+	constantBufferData.mProjection = coordinateConstantBuffer.mProjection;
 
 	m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &constantBufferData, 0, 0);
 
