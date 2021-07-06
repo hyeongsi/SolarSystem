@@ -1,6 +1,8 @@
 #include "SystemClass.h"
 #include "GraphicClass.h"
 #include "CameraClass.h"
+#include "ObjLoader.h"
+#include "ObjectClass.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -81,6 +83,12 @@ HRESULT SystemClass::InitWindow(int& nCmdShow)
             "cameraClassInit Error ", "Error", MB_OK);
         return hr;
     }
+    int vertexCount, textureCount, normalCount, faceCount = 0;
+    vertexCount = textureCount = normalCount = faceCount;
+    objLoader = new ObjLoader();
+    objLoader->ReadFileCounts(loadFileName, vertexCount, textureCount, normalCount, faceCount);
+
+    //objectClass = new ObjectClass();
 
     return hr;
 }
@@ -109,6 +117,18 @@ void SystemClass::Run()
 void SystemClass::Shutdown()
 {
     UnregisterClass(m_className, m_hInst);
+
+    if (objectClass != nullptr)
+    {
+        delete objectClass;
+        objectClass = nullptr;
+    }
+
+    if (objLoader != nullptr)
+    {
+        delete objLoader;
+        objLoader = nullptr;
+    }
 
     if (cameraClass != nullptr)
     {

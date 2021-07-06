@@ -5,6 +5,8 @@
 
 class GraphicClass;
 class CameraClass;
+class ObjLoader;
+class ObjectClass;
 class SystemClass
 {
 private:
@@ -13,6 +15,10 @@ private:
 	const char* m_className = "SolarSystemClass";
 	GraphicClass* graphicClass = NULL;
 	CameraClass* cameraClass = NULL;
+	ObjLoader* objLoader = NULL;
+	ObjectClass* objectClass = NULL;
+
+	const char* loadFileName = "cube.obj";
 
 public:
 	HRESULT InitWindow(int& nCmdShow);

@@ -1,4 +1,4 @@
-﻿  CameraClass.cpp
+﻿  ObjLoader.cpp
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dxgitype.h(12,1): warning C4005: 'DXGI_STATUS_OCCLUDED': 매크로 재정의
 D:\Windows Kits\10\Include\10.0.18362.0\shared\winerror.h(55840): message : 'DXGI_STATUS_OCCLUDED'의 이전 정의를 참조하십시오.
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dxgitype.h(13,1): warning C4005: 'DXGI_STATUS_CLIPPED': 매크로 재정의
@@ -117,4 +117,8 @@ C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\xnamathvector.i
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\xnamathmisc.inl(518,43): warning C4838: 'unsigned int'에서 'INT'(으)로의 변환에는 축소 변환이 필요합니다.
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\xnamathmisc.inl(519,40): warning C4838: 'unsigned int'에서 'INT'(으)로의 변환에는 축소 변환이 필요합니다.
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\xnamathmisc.inl(519,51): warning C4838: 'unsigned int'에서 'INT'(으)로의 변환에는 축소 변환이 필요합니다.
+C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\ObjLoader.cpp(88): warning C4700: 초기화되지 않은 'vertexIndex' 지역 변수를 사용했습니다.
+C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\ObjLoader.cpp(95): warning C4700: 초기화되지 않은 'textureIndex' 지역 변수를 사용했습니다.
+C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\ObjLoader.cpp(102): warning C4700: 초기화되지 않은 'normalIndex' 지역 변수를 사용했습니다.
+C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\ObjLoader.cpp(112): warning C4700: 초기화되지 않은 'faceIndex' 지역 변수를 사용했습니다.
   DX11_SolarSystem.vcxproj -> C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\Debug\DX11_SolarSystem.exe
