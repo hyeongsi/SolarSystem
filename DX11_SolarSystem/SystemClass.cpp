@@ -1,4 +1,6 @@
 #include "SystemClass.h"
+#include "GraphicClass.h"
+#include "CameraClass.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -25,6 +27,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 HRESULT SystemClass::InitWindow(int& nCmdShow)
 {
+    HRESULT hr = S_OK;
+
     m_hInst = GetModuleHandle(NULL);
 
     WNDCLASSEX wcex;
@@ -53,7 +57,32 @@ HRESULT SystemClass::InitWindow(int& nCmdShow)
 
     ShowWindow(m_hWnd, nCmdShow);
 
-    return S_OK;
+
+    graphicClass = new GraphicClass(&m_hWnd);
+    hr = graphicClass->InitGraphicClass();
+    if (FAILED(hr))
+    {
+        graphicClass->Shutdown();
+        delete graphicClass;
+        graphicClass = nullptr;
+
+        return hr;
+    }
+
+    cameraClass = new CameraClass();
+    hr = cameraClass->Init(graphicClass->GetWidth(), graphicClass->GetHeight(), graphicClass->GetDevice(), graphicClass->GetImmediateContext());
+    if(FAILED(hr))
+    {
+        cameraClass->Shutdown();
+        delete cameraClass;
+        cameraClass = nullptr;
+
+        MessageBox(NULL,
+            "cameraClassInit Error ", "Error", MB_OK);
+        return hr;
+    }
+
+    return hr;
 }
 
 void SystemClass::Run()
@@ -70,7 +99,9 @@ void SystemClass::Run()
         }
         else
         {
-            //Render();
+            graphicClass->Update();
+            cameraClass->Update();
+            graphicClass->Render();
         }
     }
 }
@@ -78,4 +109,23 @@ void SystemClass::Run()
 void SystemClass::Shutdown()
 {
     UnregisterClass(m_className, m_hInst);
+
+    if (cameraClass != nullptr)
+    {
+        cameraClass->Shutdown();
+        delete cameraClass;
+        cameraClass = nullptr;
+    }
+
+    if (graphicClass != nullptr)
+    {
+        graphicClass->Shutdown();
+        delete graphicClass;
+        graphicClass = nullptr;
+    }
+}
+
+HWND* SystemClass::GetHwnd()
+{
+    return &m_hWnd;
 }
