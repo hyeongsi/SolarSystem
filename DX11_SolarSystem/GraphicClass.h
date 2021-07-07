@@ -31,6 +31,8 @@ private:
     ID3D11PixelShader* m_pPixelShader = NULL;
     ID3D11InputLayout* m_pVertexLayout = NULL;
     ID3D11Buffer* m_pVertexBuffer = NULL;
+    ID3D11Buffer* m_pIndexBuffer = NULL;
+
 public:
 	GraphicClass(HWND* hwnd);
     void Shutdown();
@@ -44,5 +46,8 @@ public:
     HRESULT InitGraphicClass();
     void Update();
     void Render();
+
+    void SetIAVertexBuffer(ID3D11Buffer* vertexBuffer, UINT stride, UINT offset);
+    void SetIAIndexBuffer();
 };
 

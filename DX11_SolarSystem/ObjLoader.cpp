@@ -58,18 +58,10 @@ bool ObjLoader::ReadFileCounts(const char* fileName, int& vertexCount,
 
 bool ObjLoader::LoadObjVertexData(const char* fileName, XMFLOAT3 * vertexPosition, XMFLOAT2* vertexTexture, XMFLOAT3* vertexNormal, FaceType* faceType)
 {
-	if (vertexPosition == nullptr)
-		return false;
-	if (vertexTexture == nullptr)
-		return false;
-	if (vertexNormal == nullptr)
-		return false;
-	if (faceType == nullptr)
-		return false;
-
 	ifstream fin;
 	char input, input2;
-	int vertexIndex, textureIndex, normalIndex, faceIndex;
+	int vertexIndex, textureIndex, normalIndex, faceIndex = 0;
+	vertexIndex = textureIndex = normalIndex = faceIndex;
 
 	fin.open(fileName);
 
@@ -85,6 +77,9 @@ bool ObjLoader::LoadObjVertexData(const char* fileName, XMFLOAT3 * vertexPositio
 			fin.get(input);
 			if (input == ' ')		// ¹öÅØ½º ÁÂÇ¥
 			{
+				if (vertexPosition == nullptr)
+					break;
+
 				fin >> vertexPosition[vertexIndex].x >> vertexPosition[vertexIndex].y >> vertexPosition[vertexIndex].z;
 				vertexPosition[vertexIndex].z = vertexPosition[vertexIndex].z * -1.0f;		// ¿À¸¥¼Õ ÁÂÇ¥°è(obj) -> ¿Þ¼Õ ÁÂÇ¥°è º¯È¯(DX11)
 
@@ -92,6 +87,9 @@ bool ObjLoader::LoadObjVertexData(const char* fileName, XMFLOAT3 * vertexPositio
 			}
 			else if (input == 't')	// ÅØ½ºÃ³ ÁÂÇ¥
 			{
+				if (vertexTexture == nullptr)
+					break;
+
 				fin >> vertexTexture[textureIndex].x >> vertexTexture[textureIndex].y;
 				vertexTexture[textureIndex].y = 1.0f - vertexTexture[textureIndex].y;		// ¿À¸¥¼Õ ÁÂÇ¥°è(obj) -> ¿Þ¼Õ ÁÂÇ¥°è º¯È¯(DX11)
 
@@ -99,6 +97,9 @@ bool ObjLoader::LoadObjVertexData(const char* fileName, XMFLOAT3 * vertexPositio
 			}
 			else if (input == 'n')	// ¹ý¼± ÁÂÇ¥
 			{
+				if (vertexNormal == nullptr)
+					break;
+
 				fin >> vertexNormal[normalIndex].x >> vertexNormal[normalIndex].y >> vertexNormal[normalIndex].z;
 				vertexNormal[normalIndex].z = vertexNormal[normalIndex].z * -1.0f;		// ¿À¸¥¼Õ ÁÂÇ¥°è(obj) -> ¿Þ¼Õ ÁÂÇ¥°è º¯È¯(DX11)
 
@@ -109,6 +110,9 @@ bool ObjLoader::LoadObjVertexData(const char* fileName, XMFLOAT3 * vertexPositio
 			fin.get(input);
 			if (input == ' ')
 			{
+				if (faceType == nullptr)
+					break;
+
 				fin >> faceType[faceIndex].vIndex3 >> input2 >> faceType[faceIndex].tIndex3 >> input2 >> faceType[faceIndex].nIndex3;
 				fin >> faceType[faceIndex].vIndex2 >> input2 >> faceType[faceIndex].tIndex2 >> input2 >> faceType[faceIndex].nIndex2;
 				fin >> faceType[faceIndex].vIndex1 >> input2 >> faceType[faceIndex].tIndex1 >> input2 >> faceType[faceIndex].nIndex1;
@@ -124,5 +128,5 @@ bool ObjLoader::LoadObjVertexData(const char* fileName, XMFLOAT3 * vertexPositio
 		fin.get(input);
 	}
 
-	return false;
+	return true;
 }

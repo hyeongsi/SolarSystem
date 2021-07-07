@@ -83,12 +83,25 @@ HRESULT SystemClass::InitWindow(int& nCmdShow)
             "cameraClassInit Error ", "Error", MB_OK);
         return hr;
     }
+
     int vertexCount, textureCount, normalCount, faceCount = 0;
     vertexCount = textureCount = normalCount = faceCount;
     objLoader = new ObjLoader();
     objLoader->ReadFileCounts(loadFileName, vertexCount, textureCount, normalCount, faceCount);
 
-    //objectClass = new ObjectClass();
+    objectClass = new ObjectClass();
+    objectClass->DynamicAllocationVertices(vertexCount);
+
+    /*XMFLOAT3* vertexPosition = new XMFLOAT3[vertexCount];
+    objLoader->LoadObjVertexData(loadFileName, vertexPosition, NULL, NULL, NULL);
+
+    objectClass->SetVertexPosition(vertexPosition);*/
+
+    objLoader->LoadObjVertexData(loadFileName, &objectClass->GetVertices()->pos, NULL, NULL, NULL);
+
+    objectClass->CreateVertexBuffer(graphicClass->GetDevice());
+    graphicClass->SetIAVertexBuffer(objectClass->GetVertexBuffer(), objectClass->GetStride(), objectClass->GetOffset());
+    //graphicClass->SetIAIndexBuffer();
 
     return hr;
 }

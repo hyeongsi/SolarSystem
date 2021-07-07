@@ -31,9 +31,9 @@ ConstantBuffer* CameraClass::GetCoordinateConstantBuffer()
 void CameraClass::Update()
 {
 	ConstantBuffer constantBufferData;
-	constantBufferData.mWorld = coordinateConstantBuffer.mWorld;
-	constantBufferData.mView = coordinateConstantBuffer.mView;
-	constantBufferData.mProjection = coordinateConstantBuffer.mProjection;
+	constantBufferData.mWorld = XMMatrixTranspose(coordinateConstantBuffer.mWorld);
+	constantBufferData.mView = XMMatrixTranspose(coordinateConstantBuffer.mView);
+	constantBufferData.mProjection = XMMatrixTranspose(coordinateConstantBuffer.mProjection);
 
 	m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &constantBufferData, 0, 0);
 

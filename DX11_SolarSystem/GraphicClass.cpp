@@ -42,6 +42,7 @@ GraphicClass::GraphicClass(HWND* hwnd)
 
 void GraphicClass::Shutdown()
 {
+	if (m_pIndexBuffer)			m_pIndexBuffer->Release();
 	if (m_pVertexBuffer)		m_pVertexBuffer->Release();
 	if (m_pVertexLayout)		m_pVertexLayout->Release();
 	if (m_pVertexShader)		m_pVertexShader->Release();
@@ -173,7 +174,7 @@ HRESULT GraphicClass::InitGraphicClass()
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		//{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT numElements = ARRAYSIZE(layout);
 
@@ -199,28 +200,75 @@ HRESULT GraphicClass::InitGraphicClass()
 	if (FAILED(hr))
 		return hr;
 
-	// object init 후 vertex, index 등록
-	// ObjLoader objLoader;
-	// objLoader.ReadFileCounts();
-	// objLoader.LoadObjVertexData();
-
-	// object에서 IASetVertexBuffer, IASetIndexBuffer
-
-
+	m_pImmediateContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
 	return hr;
 }
 
 void GraphicClass::Update()
 {
-
-}
-
-void GraphicClass::Render()
-{
 	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
 	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, ClearColor);
 	m_pImmediateContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
+	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+}
+
+void GraphicClass::Render()
+{
+	m_pImmediateContext->Draw(3, 0);
+	//m_pImmediateContext->DrawIndexed(36, 0, 0);
+
 	m_pSwapChain->Present(0, 0);
+}
+
+void GraphicClass::SetIAVertexBuffer(ID3D11Buffer* vertexBuffer, UINT stride, UINT offset)
+{
+	m_pImmediateContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+}
+
+void GraphicClass::SetIAIndexBuffer()
+{
+	HRESULT hr = S_OK;
+
+	WORD indices[] =
+	{
+		3,1,0,
+		2,1,3,
+
+		0,5,4,
+		1,5,0,
+
+		3,4,7,
+		0,4,3,
+
+		1,6,5,
+		2,6,1,
+
+		2,7,6,
+		3,7,2,
+
+		6,4,5,
+		7,4,6,
+	};
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(bd));
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(WORD) * 36;        // 36 vertices needed for 12 triangles in a triangle list
+	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	bd.CPUAccessFlags = 0;
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+	InitData.pSysMem = indices;
+	hr = m_pd3dDevice->CreateBuffer(&bd, &InitData, &m_pIndexBuffer);
+	if (FAILED(hr))
+		return;
+
+	// Set index buffer
+	m_pImmediateContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
+	// Set primitive topology
+	//g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 }
