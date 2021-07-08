@@ -1,13 +1,7 @@
 #pragma once
 #include <D3D11.h>
 #include <xnamath.h>
-
-typedef struct
-{
-	int vIndex1, vIndex2, vIndex3;
-	int tIndex1, tIndex2, tIndex3;
-	int nIndex1, nIndex2, nIndex3;
-}FaceType;
+#include "ObjectClass.h"
 
 class ObjLoader
 {

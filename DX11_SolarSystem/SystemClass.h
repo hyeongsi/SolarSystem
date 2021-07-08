@@ -7,18 +7,20 @@ class GraphicClass;
 class CameraClass;
 class ObjLoader;
 class ObjectClass;
+class GameTimer;
 class SystemClass
 {
 private:
 	HWND m_hWnd;
 	HINSTANCE m_hInst;
 	const char* m_className = "SolarSystemClass";
+	GameTimer* gameTimer = NULL;
 	GraphicClass* graphicClass = NULL;
 	CameraClass* cameraClass = NULL;
 	ObjLoader* objLoader = NULL;
 	ObjectClass* objectClass = NULL;
 
-	const char* loadFileName = "cube.obj";
+	const char* loadFileName = "Sphere.obj";
 
 public:
 	HRESULT InitWindow(int& nCmdShow);

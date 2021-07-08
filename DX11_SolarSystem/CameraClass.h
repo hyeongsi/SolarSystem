@@ -15,7 +15,7 @@ class CameraClass
 private:
 	ConstantBuffer coordinateConstantBuffer;
 
-	XMVECTOR Eye = XMVectorSet(0.0f, 1.0f, -5.0f, 0.0f);
+	XMVECTOR Eye = XMVectorSet(0.0f, 10.0f, -10.0f, 0.0f);
 	XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
@@ -28,6 +28,7 @@ public:
 		ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pImmediateContext);
 
 	ConstantBuffer* GetCoordinateConstantBuffer();
+	ID3D11Buffer* GetConstantBuffer();
 	void Update();
 	void Shutdown();
 };

@@ -28,15 +28,13 @@ ConstantBuffer* CameraClass::GetCoordinateConstantBuffer()
 	return &coordinateConstantBuffer;
 }
 
+ID3D11Buffer* CameraClass::GetConstantBuffer()
+{
+	return m_pConstantBuffer;
+}
+
 void CameraClass::Update()
 {
-	ConstantBuffer constantBufferData;
-	constantBufferData.mWorld = XMMatrixTranspose(coordinateConstantBuffer.mWorld);
-	constantBufferData.mView = XMMatrixTranspose(coordinateConstantBuffer.mView);
-	constantBufferData.mProjection = XMMatrixTranspose(coordinateConstantBuffer.mProjection);
-
-	m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &constantBufferData, 0, 0);
-
 	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 }
 

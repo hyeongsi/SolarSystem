@@ -3,6 +3,7 @@
 #include "CameraClass.h"
 #include "ObjLoader.h"
 #include "ObjectClass.h"
+#include "GameTimer.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -59,6 +60,8 @@ HRESULT SystemClass::InitWindow(int& nCmdShow)
 
     ShowWindow(m_hWnd, nCmdShow);
 
+    gameTimer = new GameTimer();
+    gameTimer->Start();
 
     graphicClass = new GraphicClass(&m_hWnd);
     hr = graphicClass->InitGraphicClass();
@@ -91,17 +94,20 @@ HRESULT SystemClass::InitWindow(int& nCmdShow)
 
     objectClass = new ObjectClass();
     objectClass->DynamicAllocationVertices(vertexCount);
+    objectClass->SetVertexCount(vertexCount);
 
-    /*XMFLOAT3* vertexPosition = new XMFLOAT3[vertexCount];
-    objLoader->LoadObjVertexData(loadFileName, vertexPosition, NULL, NULL, NULL);
+    XMFLOAT3* vertexPosition = new XMFLOAT3[vertexCount];
+    FaceType* indexPosition = new FaceType[faceCount];
 
-    objectClass->SetVertexPosition(vertexPosition);*/
+    objLoader->LoadObjVertexData(loadFileName, vertexPosition, NULL, NULL, indexPosition);
 
-    objLoader->LoadObjVertexData(loadFileName, &objectClass->GetVertices()->pos, NULL, NULL, NULL);
+    objectClass->SetVertexPosition(vertexPosition, vertexCount);
+    objectClass->SetIndexPosition(indexPosition, faceCount);
 
     objectClass->CreateVertexBuffer(graphicClass->GetDevice());
     graphicClass->SetIAVertexBuffer(objectClass->GetVertexBuffer(), objectClass->GetStride(), objectClass->GetOffset());
-    //graphicClass->SetIAIndexBuffer();
+    objectClass->CreateIndexBuffer(graphicClass->GetDevice(), faceCount); // 인덱스버퍼만들기
+    graphicClass->SetIAIndexBuffer(objectClass->GetIndexBuffer()); // 인덱스버퍼등록하도록변경
 
     return hr;
 }
@@ -113,6 +119,8 @@ void SystemClass::Run()
 
     while (WM_QUIT != msg.message)
     {
+        gameTimer->Tick();
+
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
             TranslateMessage(&msg);
@@ -121,6 +129,8 @@ void SystemClass::Run()
         else
         {
             graphicClass->Update();
+            objectClass->Update(graphicClass->GetImmediateContext(), cameraClass, gameTimer->DeltaTime());
+            objectClass->Render(graphicClass->GetImmediateContext(), objectClass->GetIndexcount());
             cameraClass->Update();
             graphicClass->Render();
         }
@@ -155,6 +165,12 @@ void SystemClass::Shutdown()
         graphicClass->Shutdown();
         delete graphicClass;
         graphicClass = nullptr;
+    }
+
+    if (gameTimer != nullptr)
+    {
+        delete gameTimer;
+        gameTimer = nullptr;
     }
 }
 
