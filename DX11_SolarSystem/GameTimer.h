@@ -6,6 +6,7 @@ class GameTimer
 private:
 	double mSecondsPerCount;
 	double mDeltaTime;
+	double mTick;
 
 	__int64 mBaseTime;
 	__int64 mPausedTime;

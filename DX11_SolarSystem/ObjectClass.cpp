@@ -38,10 +38,17 @@ UINT ObjectClass::GetOffset()
 
 void ObjectClass::SetVertexPosition(XMFLOAT3* vertexPosition, int vertexSize)
 {
-	XMFLOAT3 test;
 	for (int i = 0; i < vertexSize; i++)
 	{
 		m_vertices[i].pos = vertexPosition[i];
+	}
+}
+
+void ObjectClass::SetVertexNormal(XMFLOAT3* vertexNormal, int normalCount)
+{
+	for (int i = 0; i < normalCount; i++)
+	{
+		m_vertices[i].normal = vertexNormal[i];
 	}
 }
 
@@ -117,12 +124,20 @@ HRESULT ObjectClass::CreateIndexBuffer(ID3D11Device* pd3dDevice, int byteWidth)
 
 void ObjectClass::Update(ID3D11DeviceContext* m_pImmediateContext, CameraClass* cameraClass, float deltaTime)
 {
-	mWorld = XMMatrixRotationY(deltaTime * 20);
+	static float t = 0.0f;
+	static DWORD dwTimeStart = 0;
+	DWORD dwTimeCur = GetTickCount64();
+	if (dwTimeStart == 0)
+		dwTimeStart = dwTimeCur;
+	t = (dwTimeCur - dwTimeStart) / 1000.0f;
+
+	mWorld = XMMatrixRotationY(t);
 
 	ConstantBuffer constantBufferData;
 	constantBufferData.mWorld = XMMatrixTranspose(mWorld);
 	constantBufferData.mView = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mView);
 	constantBufferData.mProjection = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mProjection);
+	constantBufferData.vOutputColor = XMFLOAT4(0, 0, 0, 0);
 
 	m_pImmediateContext->UpdateSubresource(cameraClass->GetConstantBuffer(), 0, NULL, &constantBufferData, 0, 0);
 }

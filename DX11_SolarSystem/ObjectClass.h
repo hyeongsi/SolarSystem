@@ -5,7 +5,7 @@
 struct VertexType
 {
     XMFLOAT3 pos;
-    XMFLOAT2 texture;
+    XMFLOAT3 normal;
 };
 
 typedef struct
@@ -39,6 +39,7 @@ public:
     UINT GetOffset();
 
     void SetVertexPosition(XMFLOAT3* vertexPosition, int vertexSize);
+    void SetVertexNormal(XMFLOAT3* vertexNormal, int normalCount);
     void SetIndexPosition(FaceType* indexPosition, int indexSize);
 
     void DynamicAllocationVertices(const int size);

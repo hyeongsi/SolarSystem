@@ -97,9 +97,10 @@ HRESULT SystemClass::InitWindow(int& nCmdShow)
     objectClass->SetVertexCount(vertexCount);
 
     XMFLOAT3* vertexPosition = new XMFLOAT3[vertexCount];
+    XMFLOAT3* vertexNormal = new XMFLOAT3[normalCount];
     FaceType* indexPosition = new FaceType[faceCount];
 
-    objLoader->LoadObjVertexData(loadFileName, vertexPosition, NULL, NULL, indexPosition);
+    objLoader->LoadObjVertexData(loadFileName, vertexPosition, NULL, vertexNormal, indexPosition);
 
     objectClass->SetVertexPosition(vertexPosition, vertexCount);
     objectClass->SetIndexPosition(indexPosition, faceCount);
