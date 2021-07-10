@@ -2,21 +2,14 @@
 #include <D3D11.h>
 #include <D3DX11.h>
 #include <xnamath.h>
-
-struct ConstantBuffer
-{
-	XMMATRIX mWorld;
-	XMMATRIX mView;
-	XMMATRIX mProjection;
-	XMFLOAT4 vOutputColor;
-};
+#include "vertexNbufferStructResource.h"
 
 class CameraClass
 {
 private:
 	ConstantBuffer coordinateConstantBuffer;
 
-	XMVECTOR Eye = XMVectorSet(0.0f, 100.0f, -100.0f, 0.0f);
+	XMVECTOR Eye = XMVectorSet(0.0f, 30.0f, -70.0f, 0.0f);
 	XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 

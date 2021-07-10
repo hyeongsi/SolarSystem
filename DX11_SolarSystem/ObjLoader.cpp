@@ -3,8 +3,39 @@
 
 using namespace std;
 
-bool ObjLoader::ReadFileCounts(const char* fileName, int& vertexCount, 
-	int& textureCount, int& normalCount, int& faceCount)
+int ObjLoader::GetVertexCount()
+{
+	return vertexCount;
+}
+
+int ObjLoader::GetTextureCount()
+{
+	return textureCount;
+}
+
+int ObjLoader::GetNormalCount()
+{
+	return normalCount;
+}
+
+int ObjLoader::GetFaceCount()
+{
+	return faceCount;
+}
+
+void ObjLoader::Reset()
+{
+	vertexCount = 0;
+	textureCount = 0;
+	normalCount = 0;
+	faceCount = 0;
+
+	vertices.clear();
+	texcoords.clear();
+	normals.clear();
+}
+
+bool ObjLoader::ReadFileCounts(const char* fileName)
 {
 	ifstream fin;
 	char input;
@@ -56,17 +87,24 @@ bool ObjLoader::ReadFileCounts(const char* fileName, int& vertexCount,
 	return true;
 }
 
-bool ObjLoader::LoadObjVertexData(const char* fileName, XMFLOAT3 * vertexPosition, XMFLOAT2* vertexTexture, XMFLOAT3* vertexNormal, FaceType* faceType)
+bool ObjLoader::LoadObjVertexData(const char* fileName, VertexType * vertexType, WORD* indices)
 {
 	ifstream fin;
+	XMFLOAT3 vertex;
+	XMFLOAT2 texcoord;
+	XMFLOAT3 normal;
+	FaceType face;
+
 	char input, input2;
-	int vertexIndex, textureIndex, normalIndex, faceIndex = 0;
-	vertexIndex = textureIndex = normalIndex = faceIndex;
 
 	fin.open(fileName);
 
 	if (fin.fail())
 		return false;
+
+	vertices.clear();
+	texcoords.clear();
+	normals.clear();
 
 	fin.get(input);
 	while (!fin.eof())
@@ -77,47 +115,35 @@ bool ObjLoader::LoadObjVertexData(const char* fileName, XMFLOAT3 * vertexPositio
 			fin.get(input);
 			if (input == ' ')		// 버텍스 좌표
 			{
-				if (vertexPosition == nullptr)
-					break;
+				fin >> vertex.x >> vertex.y >> vertex.z;
+				vertex.z = vertex.z * -1.0f;		// 오른손 좌표계(obj) -> 왼손 좌표계 변환(DX11)
 
-				fin >> vertexPosition[vertexIndex].x >> vertexPosition[vertexIndex].y >> vertexPosition[vertexIndex].z;
-				vertexPosition[vertexIndex].z = vertexPosition[vertexIndex].z * -1.0f;		// 오른손 좌표계(obj) -> 왼손 좌표계 변환(DX11)
-
-				vertexIndex++;
+				vertices.emplace_back(vertex);
 			}
 			else if (input == 't')	// 텍스처 좌표
 			{
-				if (vertexTexture == nullptr)
-					break;
+				fin >> texcoord.x >> texcoord.y;
+				texcoord.y = 1.0f - texcoord.y;		// 오른손 좌표계(obj) -> 왼손 좌표계 변환(DX11)
 
-				fin >> vertexTexture[textureIndex].x >> vertexTexture[textureIndex].y;
-				vertexTexture[textureIndex].y = 1.0f - vertexTexture[textureIndex].y;		// 오른손 좌표계(obj) -> 왼손 좌표계 변환(DX11)
-
-				textureIndex++;
+				texcoords.emplace_back(texcoord);
 			}
 			else if (input == 'n')	// 법선 좌표
 			{
-				if (vertexNormal == nullptr)
-					break;
+				fin >> normal.x >> normal.y >> normal.z;
+				normal.z = normal.z * -1.0f;		// 오른손 좌표계(obj) -> 왼손 좌표계 변환(DX11)
 
-				fin >> vertexNormal[normalIndex].x >> vertexNormal[normalIndex].y >> vertexNormal[normalIndex].z;
-				vertexNormal[normalIndex].z = vertexNormal[normalIndex].z * -1.0f;		// 오른손 좌표계(obj) -> 왼손 좌표계 변환(DX11)
-
-				normalIndex++;
+				normals.emplace_back(normal);
 			}
 			break;
 		case 'f':
 			fin.get(input);
 			if (input == ' ')
 			{
-				if (faceType == nullptr)
-					break;
+				fin >> face.vIndex3 >> input2 >> face.tIndex3 >> input2 >> face.nIndex3;
+				fin >> face.vIndex2 >> input2 >> face.tIndex2 >> input2 >> face.nIndex2;
+				fin >> face.vIndex1 >> input2 >> face.tIndex1 >> input2 >> face.nIndex1;
 
-				fin >> faceType[faceIndex].vIndex3 >> input2 >> faceType[faceIndex].tIndex3 >> input2 >> faceType[faceIndex].nIndex3;
-				fin >> faceType[faceIndex].vIndex2 >> input2 >> faceType[faceIndex].tIndex2 >> input2 >> faceType[faceIndex].nIndex2;
-				fin >> faceType[faceIndex].vIndex1 >> input2 >> faceType[faceIndex].tIndex1 >> input2 >> faceType[faceIndex].nIndex1;
-
-				faceIndex++;
+				faces.emplace_back(face);
 			}
 			break;
 		}
@@ -126,6 +152,38 @@ bool ObjLoader::LoadObjVertexData(const char* fileName, XMFLOAT3 * vertexPositio
 			fin.get(input);
 
 		fin.get(input);
+	}
+
+	fin.close();
+
+	// 버텍스, 인덱스 정보 저장
+	int count = 0;
+	for (int i = 0; i < faceCount; i++)
+	{
+		// .obj에서는 인덱스의 번호가 1부터 시작해서 cpp에 맞도록 0부터 시작할 수 있도록 -1 처리
+		vertexType[count].pos = vertices[faces[i].vIndex1 - 1];
+		vertexType[count].texture = texcoords[faces[i].tIndex1 - 1];
+		vertexType[count].normal = normals[faces[i].nIndex1 - 1];
+
+		indices[count] = count;
+
+		count++;
+
+		vertexType[count].pos = vertices[faces[i].vIndex2 - 1];
+		vertexType[count].texture = texcoords[faces[i].tIndex2 - 1];
+		vertexType[count].normal = normals[faces[i].nIndex2 - 1];
+
+		indices[count] = count;
+
+		count++;
+
+		vertexType[count].pos = vertices[faces[i].vIndex3 - 1];
+		vertexType[count].texture = texcoords[faces[i].tIndex3 - 1];
+		vertexType[count].normal = normals[faces[i].nIndex3 - 1];
+
+		indices[count] = count;
+
+		count++;
 	}
 
 	return true;

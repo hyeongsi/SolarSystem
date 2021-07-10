@@ -11,6 +11,9 @@ HRESULT CameraClass::Init(const float width, const float height,
 	coordinateConstantBuffer.mWorld = XMMatrixIdentity();
 	coordinateConstantBuffer.mView = XMMatrixLookAtLH(Eye, At, Up);
 	coordinateConstantBuffer.mProjection = XMMatrixPerspectiveFovLH(XM_PIDIV2, width / (FLOAT)height, 0.01f, 1000.0f);
+	coordinateConstantBuffer.mMeshColor.x = 1.0f;
+	coordinateConstantBuffer.mMeshColor.y = 1.0f;
+	coordinateConstantBuffer.mMeshColor.z = 1.0f;
 
 	D3D11_BUFFER_DESC bufferDesc;
 	ZeroMemory(&bufferDesc, sizeof(bufferDesc));

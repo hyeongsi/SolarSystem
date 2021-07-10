@@ -41,6 +41,8 @@ GraphicClass::GraphicClass(HWND* hwnd)
 
 void GraphicClass::Shutdown()
 {
+	if (m_pSamplerState)		m_pSamplerState->Release();
+	if (m_pTextureRV)			m_pTextureRV->Release();
 	if (m_pVertexLayout)		m_pVertexLayout->Release();
 	if (m_pVertexShader)		m_pVertexShader->Release();
 	if (m_pPixelShader)			m_pPixelShader->Release();
@@ -151,7 +153,7 @@ HRESULT GraphicClass::InitGraphicClass()
 	m_pImmediateContext->RSSetViewports(1, &viewPort);
 
 	ID3DBlob* pVSBlob = NULL;
-	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG;
 	wchar_t szfileName[20] = L"temp.fx";
 	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "VS", "vs_4_0", dwShaderFlags, 0, NULL, &pVSBlob, NULL, NULL);
 	if (FAILED(hr))
@@ -171,7 +173,8 @@ HRESULT GraphicClass::InitGraphicClass()
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT numElements = ARRAYSIZE(layout);
 
@@ -197,6 +200,29 @@ HRESULT GraphicClass::InitGraphicClass()
 	if (FAILED(hr))
 		return hr;
 
+	hr = D3DX11CreateShaderResourceViewFromFile(m_pd3dDevice, "EarthComposite.dds", NULL, NULL, &m_pTextureRV, NULL);
+	if (FAILED(hr))
+		return hr;
+
+	D3D11_SAMPLER_DESC sampDesc;
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	// 텍스처 출력 형식 지정 부분
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;  // 확대 축소 시, 밉맵간 필터 처리 전부 POINT, 선형샘플링 설정
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;     // 텍스처 좌표를 반복한다.
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.BorderColor[0] = 0;
+	sampDesc.BorderColor[1] = 0;
+	sampDesc.BorderColor[2] = 0;
+	sampDesc.BorderColor[3] = 0;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	hr = m_pd3dDevice->CreateSamplerState(&sampDesc, &m_pSamplerState);
+	if (FAILED(hr))
+		return hr;
+
 	return hr;
 }
 
@@ -208,6 +234,8 @@ void GraphicClass::Update()
 
 	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
 	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerState);
 }
 
 void GraphicClass::Render()

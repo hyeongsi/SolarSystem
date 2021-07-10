@@ -1,25 +1,30 @@
 //--------------------------------------------------------------------------------------
 // Constant Buffer Variables
 //--------------------------------------------------------------------------------------
-cbuffer ConstantBuffer : register( b0 )
+Texture2D shaderTexture : register(t0);
+SamplerState sampleType : register(s0);
+
+cbuffer MatrixBuffer : register(b0)
 {
 	matrix World;
 	matrix View;
 	matrix Projection;
-	float4 vOutputColor;
+	float4 meshColor;
 }
 
 //--------------------------------------------------------------------------------------
 struct VS_INPUT
 {
-    float4 Pos : POSITION;
-    float3 Norm : NORMAL;
+	float4 Pos : POSITION;
+	float2 Tex : TEXCOORD0;
+	float3 Norm : NORMAL;
 };
 
 struct PS_INPUT
 {
-    float4 Pos : SV_POSITION;
-    float3 Norm : TEXCOORD0;
+	float4 Pos : SV_POSITION;
+	float2 Tex : TEXCOORD0;
+	float3 Norm : NORMAL;
 };
 
 //--------------------------------------------------------------------------------------
@@ -28,11 +33,16 @@ struct PS_INPUT
 PS_INPUT VS( VS_INPUT input )
 {
     PS_INPUT output = (PS_INPUT)0;
+
     output.Pos = mul( input.Pos, World );
     output.Pos = mul( output.Pos, View );
     output.Pos = mul( output.Pos, Projection );
-    output.Norm = mul( input.Norm, World );
+    output.Norm = mul( input.Norm, (float3x3)World );
     
+    output.Tex = input.Tex;
+
+    output.Norm = normalize(output.Norm);
+
     return output;
 }
 
@@ -42,5 +52,5 @@ PS_INPUT VS( VS_INPUT input )
 //--------------------------------------------------------------------------------------
 float4 PS( PS_INPUT input) : SV_Target
 {
-    return vOutputColor;
+    return shaderTexture.Sample(sampleType, input.Tex) * meshColor;
 }

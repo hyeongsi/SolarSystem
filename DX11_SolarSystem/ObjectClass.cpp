@@ -7,6 +7,11 @@ VertexType* ObjectClass::GetVertices()
 	return m_vertices;
 }
 
+WORD* ObjectClass::GetIndices()
+{
+	return m_indices;
+}
+
 ID3D11Buffer* ObjectClass::GetVertexBuffer()
 {
 	return m_pVertexBuffer;
@@ -17,10 +22,6 @@ ID3D11Buffer* ObjectClass::GetIndexBuffer()
 	return m_pIndexBuffer;
 }
 
-void ObjectClass::SetVertexCount(int count)
-{
-	vertexCount = count;
-}
 
 int ObjectClass::GetIndexcount()
 {
@@ -37,41 +38,6 @@ UINT ObjectClass::GetOffset()
 	return offset;
 }
 
-void ObjectClass::SetVertexPosition(XMFLOAT3* vertexPosition, int vertexSize)
-{
-	for (int i = 0; i < vertexSize; i++)
-	{
-		m_vertices[i].pos = vertexPosition[i];
-	}
-}
-
-void ObjectClass::SetVertexNormal(XMFLOAT3* vertexNormal, int normalCount)
-{
-	for (int i = 0; i < normalCount; i++)
-	{
-		m_vertices[i].normal = vertexNormal[i];
-	}
-}
-
-void ObjectClass::SetIndexPosition(FaceType* indexPosition, int indexSize)
-{
-	delete[] m_indices;
-	m_indices = nullptr;
-
-	m_indices = new WORD[indexSize * 3];
-
-	int indexCount = 0;
-	for (int i = 0; i < indexSize; i++)
-	{
-		m_indices[indexCount] = indexPosition[i].vIndex1;
-		indexCount++;
-		m_indices[indexCount] = indexPosition[i].vIndex2;
-		indexCount++;
-		m_indices[indexCount] = indexPosition[i].vIndex3;
-		indexCount++;
-	}
-}
-
 void ObjectClass::DynamicAllocationVertices(const int size)
 {
 	delete[] m_vertices;
@@ -81,6 +47,19 @@ void ObjectClass::DynamicAllocationVertices(const int size)
 		return;
 
 	m_vertices = new VertexType[size];
+	vertexTypeCount = size;
+}
+
+void ObjectClass::DynamicAllocationIndices(const int size)
+{
+	delete[] m_indices;
+	m_indices = nullptr;
+
+	if (size <= 0)
+		return;
+
+	m_indices = new WORD[size];
+	indexCount = size;
 }
 
 HRESULT ObjectClass::CreateVertexBuffer(ID3D11Device* pd3dDevice)
@@ -90,7 +69,7 @@ HRESULT ObjectClass::CreateVertexBuffer(ID3D11Device* pd3dDevice)
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(VertexType) * vertexCount;
+	bd.ByteWidth = sizeof(VertexType) * vertexTypeCount;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 	D3D11_SUBRESOURCE_DATA InitData;
@@ -101,11 +80,9 @@ HRESULT ObjectClass::CreateVertexBuffer(ID3D11Device* pd3dDevice)
 	return hr;
 }
 
-HRESULT ObjectClass::CreateIndexBuffer(ID3D11Device* pd3dDevice, int byteWidth)
+HRESULT ObjectClass::CreateIndexBuffer(ID3D11Device* pd3dDevice)
 {
 	HRESULT hr = S_OK;
-
-	indexCount = byteWidth * 3;
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
@@ -130,17 +107,17 @@ void ObjectClass::Update(ID3D11DeviceContext* m_pImmediateContext,  float deltaT
 
 	// 각 행성별 비율 : 109.25, 0.383, 0.950, 1, 0.532, 10.97, 9.14, 3.98, 3.87 
 	mWorld[0] = XMMatrixScaling(10.0f, 10.0f, 10.0f) * XMMatrixRotationY(accumDeltaTime);
-	mWorld[1] = XMMatrixScaling(0.3, 0.3f, 0.3f)  * XMMatrixTranslation(-20.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
-	mWorld[2] = XMMatrixScaling(0.9f, 0.9f, 0.9f)  * XMMatrixTranslation(-25.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
-	mWorld[3] = XMMatrixScaling(1.0f, 1.0f, 1.0f)  * XMMatrixTranslation(-30.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
-	mWorld[4] = XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixTranslation(-33.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
-	mWorld[5] = XMMatrixScaling(5.0, 5.0, 5.0f)  * XMMatrixTranslation(-38.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
+	mWorld[1] = XMMatrixScaling(0.3, 0.3f, 0.3f)  * XMMatrixTranslation(-15.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
+	mWorld[2] = XMMatrixScaling(0.9f, 0.9f, 0.9f)  * XMMatrixTranslation(-20.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
+	mWorld[3] = XMMatrixScaling(1.0f, 1.0f, 1.0f)  * XMMatrixTranslation(-25.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
+	mWorld[4] = XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixTranslation(-30.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
+	mWorld[5] = XMMatrixScaling(5.0, 5.0, 5.0f)  * XMMatrixTranslation(-40.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
 	mWorld[6] = XMMatrixScaling(4.5, 4.5f, 4.5f)  * XMMatrixTranslation(-50.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
 	mWorld[7] = XMMatrixScaling(4.0f, 4.0f, 4.0f) * XMMatrixTranslation(-60.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
 	mWorld[8] = XMMatrixScaling(3.7f, 3.7f, 3.7f)  * XMMatrixTranslation(-70.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
 }
 
-void ObjectClass::Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* cameraClass, int size)
+void ObjectClass::Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* cameraClass)
 {
 	m_pImmediateContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -149,11 +126,11 @@ void ObjectClass::Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* 
 		constantBufferData[i].mWorld = XMMatrixTranspose(mWorld[i]);
 		constantBufferData[i].mView = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mView);
 		constantBufferData[i].mProjection = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mProjection);
-		constantBufferData[i].vOutputColor = XMFLOAT4(0, 0, 0, 1);
+		constantBufferData[i].mMeshColor = cameraClass->GetCoordinateConstantBuffer()->mMeshColor;
 
 		m_pImmediateContext->UpdateSubresource(cameraClass->GetConstantBuffer(), 0, NULL, &constantBufferData[i], 0, 0);
 
-		m_pImmediateContext->DrawIndexed(size, 0, 0);
+		m_pImmediateContext->DrawIndexed(indexCount, 0, 0);
 	}
 }
 

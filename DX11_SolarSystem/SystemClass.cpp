@@ -87,28 +87,20 @@ HRESULT SystemClass::InitWindow(int& nCmdShow)
         return hr;
     }
 
-    int vertexCount, textureCount, normalCount, faceCount = 0;
-    vertexCount = textureCount = normalCount = faceCount;
     objLoader = new ObjLoader();
-    objLoader->ReadFileCounts(loadFileName, vertexCount, textureCount, normalCount, faceCount);
+    objLoader->Reset();
+    objLoader->ReadFileCounts(loadFileName);    // .obj를 통해 각 데이터의 개수를 구함
 
     objectClass = new ObjectClass();
-    objectClass->DynamicAllocationVertices(vertexCount);
-    objectClass->SetVertexCount(vertexCount);
+    objectClass->DynamicAllocationVertices(objLoader->GetFaceCount() * 3);  // vertex, texture, normal 3개를 저장해야해서 face*3
+    objectClass->DynamicAllocationIndices(objLoader->GetFaceCount() * 3);
 
-    XMFLOAT3* vertexPosition = new XMFLOAT3[vertexCount];
-    XMFLOAT3* vertexNormal = new XMFLOAT3[normalCount];
-    FaceType* indexPosition = new FaceType[faceCount];
+    objLoader->LoadObjVertexData(loadFileName, objectClass->GetVertices(), objectClass->GetIndices());  // 데이터 로드 + 저장
 
-    objLoader->LoadObjVertexData(loadFileName, vertexPosition, NULL, vertexNormal, indexPosition);
-
-    objectClass->SetVertexPosition(vertexPosition, vertexCount);
-    objectClass->SetIndexPosition(indexPosition, faceCount);
-
-    objectClass->CreateVertexBuffer(graphicClass->GetDevice());
-    graphicClass->SetIAVertexBuffer(objectClass->GetVertexBuffer(), objectClass->GetStride(), objectClass->GetOffset());
-    objectClass->CreateIndexBuffer(graphicClass->GetDevice(), faceCount); // 인덱스버퍼만들기
-    graphicClass->SetIAIndexBuffer(objectClass->GetIndexBuffer()); // 인덱스버퍼등록하도록변경
+    objectClass->CreateVertexBuffer(graphicClass->GetDevice()); // 버텍스 버퍼 생성
+    graphicClass->SetIAVertexBuffer(objectClass->GetVertexBuffer(), objectClass->GetStride(), objectClass->GetOffset());    // 버텍스 버퍼 등록
+    objectClass->CreateIndexBuffer(graphicClass->GetDevice());   // 인덱스 버퍼 생성
+    graphicClass->SetIAIndexBuffer(objectClass->GetIndexBuffer());  // 인덱스 버퍼 등록
 
     return hr;
 }
@@ -131,7 +123,7 @@ void SystemClass::Run()
         {
             graphicClass->Update();
             objectClass->Update(graphicClass->GetImmediateContext(), gameTimer->DeltaTime());
-            objectClass->Render(graphicClass->GetImmediateContext(), cameraClass, objectClass->GetIndexcount());
+            objectClass->Render(graphicClass->GetImmediateContext(), cameraClass);
             cameraClass->Update();
             graphicClass->Render();
         }

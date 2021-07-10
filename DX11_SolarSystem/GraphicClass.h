@@ -31,6 +31,9 @@ private:
     ID3D11PixelShader* m_pPixelShader = NULL;
     ID3D11InputLayout* m_pVertexLayout = NULL;
 
+    ID3D11ShaderResourceView* m_pTextureRV = NULL;
+    ID3D11SamplerState* m_pSamplerState = NULL;
+
 public:
 	GraphicClass(HWND* hwnd);
     void Shutdown();
