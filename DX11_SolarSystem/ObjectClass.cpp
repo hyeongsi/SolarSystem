@@ -1,5 +1,6 @@
 #include "ObjectClass.h"
-#include "CameraClass.h"
+
+using namespace std;
 
 VertexType* ObjectClass::GetVertices()
 {
@@ -122,35 +123,48 @@ HRESULT ObjectClass::CreateIndexBuffer(ID3D11Device* pd3dDevice, int byteWidth)
 	return hr;
 }
 
-void ObjectClass::Update(ID3D11DeviceContext* m_pImmediateContext, CameraClass* cameraClass, float deltaTime)
+void ObjectClass::Update(ID3D11DeviceContext* m_pImmediateContext,  float deltaTime)
 {
-	static float t = 0.0f;
-	static DWORD dwTimeStart = 0;
-	DWORD dwTimeCur = GetTickCount64();
-	if (dwTimeStart == 0)
-		dwTimeStart = dwTimeCur;
-	t = (dwTimeCur - dwTimeStart) / 1000.0f;
+	static float accumDeltaTime = 0.0f;
+	accumDeltaTime += deltaTime;
 
-	mWorld = XMMatrixRotationY(t);
-
-	ConstantBuffer constantBufferData;
-	constantBufferData.mWorld = XMMatrixTranspose(mWorld);
-	constantBufferData.mView = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mView);
-	constantBufferData.mProjection = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mProjection);
-	constantBufferData.vOutputColor = XMFLOAT4(0, 0, 0, 0);
-
-	m_pImmediateContext->UpdateSubresource(cameraClass->GetConstantBuffer(), 0, NULL, &constantBufferData, 0, 0);
+	// 각 행성별 비율 : 109.25, 0.383, 0.950, 1, 0.532, 10.97, 9.14, 3.98, 3.87 
+	mWorld[0] = XMMatrixScaling(10.0f, 10.0f, 10.0f) * XMMatrixRotationY(accumDeltaTime);
+	mWorld[1] = XMMatrixScaling(0.3, 0.3f, 0.3f)  * XMMatrixTranslation(-20.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
+	mWorld[2] = XMMatrixScaling(0.9f, 0.9f, 0.9f)  * XMMatrixTranslation(-25.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
+	mWorld[3] = XMMatrixScaling(1.0f, 1.0f, 1.0f)  * XMMatrixTranslation(-30.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
+	mWorld[4] = XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixTranslation(-33.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
+	mWorld[5] = XMMatrixScaling(5.0, 5.0, 5.0f)  * XMMatrixTranslation(-38.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
+	mWorld[6] = XMMatrixScaling(4.5, 4.5f, 4.5f)  * XMMatrixTranslation(-50.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
+	mWorld[7] = XMMatrixScaling(4.0f, 4.0f, 4.0f) * XMMatrixTranslation(-60.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
+	mWorld[8] = XMMatrixScaling(3.7f, 3.7f, 3.7f)  * XMMatrixTranslation(-70.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
 }
 
-void ObjectClass::Render(ID3D11DeviceContext* m_pImmediateContext, int size)
+void ObjectClass::Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* cameraClass, int size)
 {
 	m_pImmediateContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	m_pImmediateContext->DrawIndexed(size, 0,0);
+
+	for (int i = 0; i < SOLAR_SYSTEM_SIZE; i++)	// 태양,수금지화목토천해
+	{
+		constantBufferData[i].mWorld = XMMatrixTranspose(mWorld[i]);
+		constantBufferData[i].mView = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mView);
+		constantBufferData[i].mProjection = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mProjection);
+		constantBufferData[i].vOutputColor = XMFLOAT4(0, 0, 0, 1);
+
+		m_pImmediateContext->UpdateSubresource(cameraClass->GetConstantBuffer(), 0, NULL, &constantBufferData[i], 0, 0);
+
+		m_pImmediateContext->DrawIndexed(size, 0, 0);
+	}
 }
 
 ObjectClass::ObjectClass()
 {
-	mWorld = XMMatrixIdentity();
+	ConstantBuffer constantBuffer;
+	for (int i = 0; i < SOLAR_SYSTEM_SIZE; i++)
+	{
+		mWorld.emplace_back(XMMatrixIdentity());
+		constantBufferData.emplace_back(constantBuffer);
+	}
 }
 
 ObjectClass::~ObjectClass()

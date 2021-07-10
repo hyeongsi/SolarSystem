@@ -130,8 +130,8 @@ void SystemClass::Run()
         else
         {
             graphicClass->Update();
-            objectClass->Update(graphicClass->GetImmediateContext(), cameraClass, gameTimer->DeltaTime());
-            objectClass->Render(graphicClass->GetImmediateContext(), objectClass->GetIndexcount());
+            objectClass->Update(graphicClass->GetImmediateContext(), gameTimer->DeltaTime());
+            objectClass->Render(graphicClass->GetImmediateContext(), cameraClass, objectClass->GetIndexcount());
             cameraClass->Update();
             graphicClass->Render();
         }

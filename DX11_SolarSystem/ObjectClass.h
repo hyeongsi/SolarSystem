@@ -1,6 +1,10 @@
 #pragma once
 #include <D3D11.h>
 #include <xnamath.h>
+#include <vector>
+#include "CameraClass.h"
+
+const int SOLAR_SYSTEM_SIZE = 9;	// 태양,수금지화목토천해
 
 struct VertexType
 {
@@ -15,7 +19,6 @@ typedef struct
     int nIndex1, nIndex2, nIndex3;
 }FaceType;
 
-class CameraClass;
 class ObjectClass
 {
 private:
@@ -23,7 +26,8 @@ private:
     ID3D11Buffer* m_pVertexBuffer = NULL;
     WORD* m_indices = NULL;
     ID3D11Buffer* m_pIndexBuffer = NULL;
-    XMMATRIX mWorld;
+    std::vector<XMMATRIX> mWorld;
+    std::vector<ConstantBuffer> constantBufferData;
 
     int vertexCount = 0;
     int indexCount = 0;
@@ -46,8 +50,8 @@ public:
     HRESULT CreateVertexBuffer(ID3D11Device* pd3dDevice);
     HRESULT CreateIndexBuffer(ID3D11Device* pd3dDevice, int byteWidth);
 
-    void Update(ID3D11DeviceContext* m_pImmediateContext, CameraClass* cameraClass, float deltaTime);
-    void Render(ID3D11DeviceContext* m_pImmediateContext, int size);
+    void Update(ID3D11DeviceContext* m_pImmediateContext, float deltaTime);
+    void Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* cameraClass, int size);
 
     ObjectClass();
     ~ObjectClass();

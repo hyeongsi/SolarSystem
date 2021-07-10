@@ -10,7 +10,7 @@ HRESULT CameraClass::Init(const float width, const float height,
 
 	coordinateConstantBuffer.mWorld = XMMatrixIdentity();
 	coordinateConstantBuffer.mView = XMMatrixLookAtLH(Eye, At, Up);
-	coordinateConstantBuffer.mProjection = XMMatrixPerspectiveFovLH(XM_PIDIV2, width / (FLOAT)height, 0.01f, 100.0f);
+	coordinateConstantBuffer.mProjection = XMMatrixPerspectiveFovLH(XM_PIDIV2, width / (FLOAT)height, 0.01f, 1000.0f);
 
 	D3D11_BUFFER_DESC bufferDesc;
 	ZeroMemory(&bufferDesc, sizeof(bufferDesc));
