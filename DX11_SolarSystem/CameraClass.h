@@ -9,7 +9,7 @@ class CameraClass
 private:
 	ConstantBuffer coordinateConstantBuffer;
 
-	XMVECTOR Eye = XMVectorSet(0.0f, 30.0f, -70.0f, 0.0f);
+	XMVECTOR Eye = XMVectorSet(0.0f, 70.0f, -100.0f, 0.0f);
 	XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 

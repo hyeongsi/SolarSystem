@@ -4,6 +4,7 @@
 #include <xnamath.h>
 
 const int SOLAR_SYSTEM_SIZE = 9;	// 태양,수금지화목토천해
+const float PI = 3.14f;
 
 struct ConstantBuffer
 {
