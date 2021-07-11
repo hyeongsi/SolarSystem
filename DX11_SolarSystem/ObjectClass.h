@@ -14,6 +14,11 @@ private:
     ID3D11Buffer* m_pIndexBuffer = NULL;
     std::vector<XMMATRIX> mWorld;
     std::vector<ConstantBuffer> constantBufferData;
+    std::vector<float> scale;           // 크기
+    std::vector<float> rotationAngle;   // 자전기울기
+    std::vector<float> rotationSpeed;   // 자전속도
+    std::vector<float> distance;        // 거리
+    std::vector<float> revolutionSpeed; // 공전속도
 
     int vertexTypeCount = 0;
     int indexCount = 0;

@@ -1,4 +1,5 @@
 #include "ObjectClass.h"
+#include <fstream>
 
 using namespace std;
 
@@ -104,7 +105,6 @@ void ObjectClass::Update(ID3D11DeviceContext* m_pImmediateContext,  float deltaT
 {
 	static float accumDeltaTime = 0.0f;
 	accumDeltaTime += deltaTime;
-	int accumDistance = 0;
 
 	// 각 행성별 비율 : 109.25, 0.383, 0.950, 1, 0.532, 10.97, 9.14, 3.98, 3.87 
 	// 태양과의 거리 : 0, 579.1, 1082, 1496, 2279, 7785, 14340, 28710, 44950
@@ -112,35 +112,12 @@ void ObjectClass::Update(ID3D11DeviceContext* m_pImmediateContext,  float deltaT
 	// 자전속도 : 1.9, 0.003, 0.0018, 0.4651, 0.2411, 12.6, 9.8, 2.59, 2.68
 	// 자전기울기 : 7.25, 0.01, 2.64, 23.44, 25.19, 3.12, 26.73, 82.23, 28.33
 
-	// 위의 데이터 나중에 txt 파일로 빼가지고, 로드해서 사용하도록 만들기
-	// 크기 * 자전 * 거리 * 공전
-
-	accumDistance += 20.0f;
-	mWorld[0] = XMMatrixScaling(20.0f, 20.0f, 20.0f) * XMMatrixRotationX(7.25f * PI /180.0f) * XMMatrixRotationY(accumDeltaTime * 1.9f);
-	accumDistance += 5.0f + 0.383f;
-	mWorld[1] = XMMatrixScaling(0.383, 0.383f, 0.383f) * XMMatrixRotationX(0.01f * PI / 180.0f) * XMMatrixRotationY(accumDeltaTime * 0.003f) 
-		* XMMatrixTranslation(-accumDistance, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime * 4.8f);
-	accumDistance += 5.0f + 0.95f;
-	mWorld[2] = XMMatrixScaling(0.95f, 0.95f, 0.95f) * XMMatrixRotationX(2.64f * PI / 180.0f) * XMMatrixRotationY(accumDeltaTime * 0.0018f) 
-		* XMMatrixTranslation(-accumDistance, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime * 3.5f);
-	accumDistance += 5.0f + 1.0f;
-	mWorld[3] = XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixRotationX(23.44f * PI / 180.0f) * XMMatrixRotationY(accumDeltaTime * 0.4651f) 
-		* XMMatrixTranslation(-accumDistance, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime * 3.0f);
-	accumDistance += 5.0f + 0.532f;
-	mWorld[4] = XMMatrixScaling(0.532f, 0.532f, 0.532f) * XMMatrixRotationX(25.19f * PI / 180.0f) * XMMatrixRotationY(accumDeltaTime * 0.2411f) 
-		* XMMatrixTranslation(-accumDistance, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime * 2.4f);
-	accumDistance += 50.0f + 10.0f;
-	mWorld[5] = XMMatrixScaling(10.97, 10.97, 10.97f) * XMMatrixRotationX(3.12f * PI / 180.0f) * XMMatrixRotationY(accumDeltaTime * 12.6f) 
-		* XMMatrixTranslation(-accumDistance, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime * 1.3f);
-	accumDistance += 50.0f + 9.14f;
-	mWorld[6] = XMMatrixScaling(9.14, 9.14f, 9.14f) * XMMatrixRotationX(26.73f * PI / 180.0f) * XMMatrixRotationY(accumDeltaTime * 9.8f) 
-		* XMMatrixTranslation(-accumDistance, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime * 0.96f);
-	accumDistance += 50.0f + 3.98f;
-	mWorld[7] = XMMatrixScaling(3.98f, 3.98f, 3.98f) * XMMatrixRotationX(82.23f * PI / 180.0f) * XMMatrixRotationY(accumDeltaTime * 2.59f) 
-		* XMMatrixTranslation(-accumDistance, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime * 0.7f);
-	accumDistance += 50.0f + 3.87f;
-	mWorld[8] = XMMatrixScaling(3.87f, 3.87f, 3.87f) * XMMatrixRotationX(28.33f * PI / 180.0f) * XMMatrixRotationY(accumDeltaTime * 2.68f) 
-		* XMMatrixTranslation(-accumDistance, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime * 2.35f);
+	mWorld[0] = XMMatrixScaling(scale[0], scale[0], scale[0]) * XMMatrixRotationX(rotationAngle[0] * PI /180.0f) * XMMatrixRotationY(accumDeltaTime * rotationSpeed[0]);
+	for (int i = 1; i < SOLAR_SYSTEM_SIZE; i++)
+	{
+		mWorld[i] = XMMatrixScaling(scale[i], scale[i], scale[i]) * XMMatrixRotationX(rotationAngle[i] * PI / 180.0f) * XMMatrixRotationY(accumDeltaTime * rotationSpeed[i])
+			* XMMatrixTranslation(-distance[i], 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime * revolutionSpeed[i]);
+	}
 }
 
 void ObjectClass::Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* cameraClass, vector<ID3D11ShaderResourceView*> shaderResourceView)
@@ -161,11 +138,42 @@ void ObjectClass::Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* 
 
 ObjectClass::ObjectClass()
 {
+	const char* solarSystemDataFilePath = "Textures/data.txt";
+
 	ConstantBuffer constantBuffer;
 	for (int i = 0; i < SOLAR_SYSTEM_SIZE; i++)
 	{
 		mWorld.emplace_back(XMMatrixIdentity());
 		constantBufferData.emplace_back(constantBuffer);
+	}
+
+	ifstream fin;
+	float data;
+
+	fin.open(solarSystemDataFilePath);
+
+	if (fin.fail())
+	{
+		return;
+	}
+
+	// 크기, 자전기울기, 자전속도, 거리, 공전속도
+	while (!fin.eof())
+	{
+		fin >> data;					
+		scale.emplace_back(data);				// 크기
+
+		fin >> data;
+		rotationAngle.emplace_back(data);		// 자전기울기
+
+		fin >> data;
+		rotationSpeed.emplace_back(data);		// 자전속도
+
+		fin >> data;
+		distance.emplace_back(data);			// 거리
+
+		fin >> data;
+		revolutionSpeed.emplace_back(data);		// 공전속도
 	}
 }
 
