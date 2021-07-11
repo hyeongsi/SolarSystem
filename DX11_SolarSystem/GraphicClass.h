@@ -2,6 +2,10 @@
 #include <D3D11.h>
 #include <D3DX11.h>
 #include <xnamath.h>
+#include <vector>
+#include <string>
+
+using namespace std;
 
 class GraphicClass
 {
@@ -31,8 +35,11 @@ private:
     ID3D11PixelShader* m_pPixelShader = NULL;
     ID3D11InputLayout* m_pVertexLayout = NULL;
 
-    ID3D11ShaderResourceView* m_pTextureRV = NULL;
+    vector<string> m_texturePath;
+    vector<ID3D11ShaderResourceView*> m_pSolarSystemTextureRV;
     ID3D11SamplerState* m_pSamplerState = NULL;
+
+    HRESULT LoadTexture(const char* filePath);
 
 public:
 	GraphicClass(HWND* hwnd);
@@ -43,8 +50,10 @@ public:
 
     ID3D11Device* GetDevice();
     ID3D11DeviceContext* GetImmediateContext();
+    vector<ID3D11ShaderResourceView*> GetShaderResourceViewVector();
 
     HRESULT InitGraphicClass();
+
     void Update();
     void Render();
 

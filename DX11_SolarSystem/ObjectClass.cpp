@@ -117,7 +117,7 @@ void ObjectClass::Update(ID3D11DeviceContext* m_pImmediateContext,  float deltaT
 	mWorld[8] = XMMatrixScaling(3.7f, 3.7f, 3.7f)  * XMMatrixTranslation(-70.0f, 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime);
 }
 
-void ObjectClass::Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* cameraClass)
+void ObjectClass::Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* cameraClass, vector<ID3D11ShaderResourceView*> shaderResourceView)
 {
 	m_pImmediateContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -126,10 +126,9 @@ void ObjectClass::Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* 
 		constantBufferData[i].mWorld = XMMatrixTranspose(mWorld[i]);
 		constantBufferData[i].mView = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mView);
 		constantBufferData[i].mProjection = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mProjection);
-		constantBufferData[i].mMeshColor = cameraClass->GetCoordinateConstantBuffer()->mMeshColor;
 
 		m_pImmediateContext->UpdateSubresource(cameraClass->GetConstantBuffer(), 0, NULL, &constantBufferData[i], 0, 0);
-
+		m_pImmediateContext->PSSetShaderResources(0, 1, &shaderResourceView[i]);
 		m_pImmediateContext->DrawIndexed(indexCount, 0, 0);
 	}
 }

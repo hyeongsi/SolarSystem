@@ -9,7 +9,6 @@ cbuffer MatrixBuffer : register(b0)
 	matrix World;
 	matrix View;
 	matrix Projection;
-	float4 meshColor;
 }
 
 //--------------------------------------------------------------------------------------
@@ -52,5 +51,5 @@ PS_INPUT VS( VS_INPUT input )
 //--------------------------------------------------------------------------------------
 float4 PS( PS_INPUT input) : SV_Target
 {
-    return shaderTexture.Sample(sampleType, input.Tex) * meshColor;
+    return shaderTexture.Sample(sampleType, input.Tex);
 }

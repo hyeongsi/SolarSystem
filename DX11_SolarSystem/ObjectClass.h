@@ -34,7 +34,7 @@ public:
     HRESULT CreateIndexBuffer(ID3D11Device* pd3dDevice);
 
     void Update(ID3D11DeviceContext* m_pImmediateContext, float deltaTime);
-    void Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* cameraClass);
+    void Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* cameraClass, std::vector<ID3D11ShaderResourceView*> shaderResourceView);
 
     ObjectClass();
     ~ObjectClass();

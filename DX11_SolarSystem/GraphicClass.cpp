@@ -2,6 +2,32 @@
 #include "ObjLoader.h"
 #include "CameraClass.h"
 #include <d3dcompiler.h>
+#include <fstream>
+
+HRESULT GraphicClass::LoadTexture(const char* filePath)
+{
+	HRESULT hr = S_OK;
+	ifstream fin;
+	string texturePathString;
+
+	m_texturePath.clear();
+
+	fin.open(filePath);
+
+	if (fin.fail())
+	{
+		hr = S_FALSE;
+		return hr;
+	}
+
+	while (!fin.eof())
+	{
+		ID3D11ShaderResourceView* shaderResourceView = NULL;
+		m_pSolarSystemTextureRV.emplace_back(shaderResourceView);
+		fin >> texturePathString;
+		m_texturePath.emplace_back(texturePathString);
+	}
+}
 
 GraphicClass::GraphicClass(HWND* hwnd)
 {
@@ -37,12 +63,20 @@ GraphicClass::GraphicClass(HWND* hwnd)
 	m_pVertexShader = nullptr;
 	m_pPixelShader = nullptr;
 	m_pVertexLayout = nullptr;
+
+	LoadTexture("Textures/solarSystem.txt");
 }
 
 void GraphicClass::Shutdown()
 {
 	if (m_pSamplerState)		m_pSamplerState->Release();
-	if (m_pTextureRV)			m_pTextureRV->Release();
+	for (int i = 0; i < (int)m_pSolarSystemTextureRV.size(); i++)
+	{
+		if (m_pSolarSystemTextureRV[i])			m_pSolarSystemTextureRV[i]->Release();
+	}
+	m_texturePath.clear();
+	m_pSolarSystemTextureRV.clear();
+
 	if (m_pVertexLayout)		m_pVertexLayout->Release();
 	if (m_pVertexShader)		m_pVertexShader->Release();
 	if (m_pPixelShader)			m_pPixelShader->Release();
@@ -200,9 +234,12 @@ HRESULT GraphicClass::InitGraphicClass()
 	if (FAILED(hr))
 		return hr;
 
-	hr = D3DX11CreateShaderResourceViewFromFile(m_pd3dDevice, "EarthComposite.dds", NULL, NULL, &m_pTextureRV, NULL);
-	if (FAILED(hr))
-		return hr;
+	for (int i = 0; i < (int)m_texturePath.size(); i++)
+	{
+		hr = D3DX11CreateShaderResourceViewFromFile(m_pd3dDevice, m_texturePath[i].c_str(), NULL, NULL, &m_pSolarSystemTextureRV[i], NULL);
+		if (FAILED(hr))
+			return hr;
+	}
 
 	D3D11_SAMPLER_DESC sampDesc;
 	ZeroMemory(&sampDesc, sizeof(sampDesc));
@@ -234,7 +271,6 @@ void GraphicClass::Update()
 
 	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
 	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
-	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
 	m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerState);
 }
 
@@ -251,4 +287,9 @@ void GraphicClass::SetIAVertexBuffer(ID3D11Buffer* vertexBuffer, UINT stride, UI
 void GraphicClass::SetIAIndexBuffer(ID3D11Buffer* indexBuffer)
 {
 	m_pImmediateContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+}
+
+vector<ID3D11ShaderResourceView*> GraphicClass::GetShaderResourceViewVector()
+{
+	return m_pSolarSystemTextureRV;
 }

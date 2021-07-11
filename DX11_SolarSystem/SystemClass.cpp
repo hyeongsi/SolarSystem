@@ -123,7 +123,7 @@ void SystemClass::Run()
         {
             graphicClass->Update();
             objectClass->Update(graphicClass->GetImmediateContext(), gameTimer->DeltaTime());
-            objectClass->Render(graphicClass->GetImmediateContext(), cameraClass);
+            objectClass->Render(graphicClass->GetImmediateContext(), cameraClass, graphicClass->GetShaderResourceViewVector());
             cameraClass->Update();
             graphicClass->Render();
         }
