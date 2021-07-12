@@ -4,6 +4,7 @@
 #include "ObjLoader.h"
 #include "ObjectClass.h"
 #include "GameTimer.h"
+#include "LightClass.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -87,6 +88,19 @@ HRESULT SystemClass::InitWindow(int& nCmdShow)
         return hr;
     }
 
+    lightClass = new LightClass();
+    hr = lightClass->Init(graphicClass->GetDevice(), graphicClass->GetImmediateContext());
+    if (FAILED(hr))
+    {
+        lightClass->Shutdown();
+        delete lightClass;
+        lightClass = nullptr;
+
+        MessageBox(NULL,
+            "lightClassInit Error ", "Error", MB_OK);
+        return hr;
+    }
+
     objLoader = new ObjLoader();
     objLoader->Reset();
     objLoader->ReadFileCounts(loadFileName);    // .obj를 통해 각 데이터의 개수를 구함
@@ -122,6 +136,7 @@ void SystemClass::Run()
         else
         {
             graphicClass->Update();
+            lightClass->Update();
             objectClass->Update(graphicClass->GetImmediateContext(), gameTimer->DeltaTime());
             objectClass->Render(graphicClass->GetImmediateContext(), cameraClass, graphicClass->GetShaderResourceViewVector());
             cameraClass->Update();
@@ -151,6 +166,13 @@ void SystemClass::Shutdown()
         cameraClass->Shutdown();
         delete cameraClass;
         cameraClass = nullptr;
+    }
+
+    if (lightClass != nullptr)
+    {
+        lightClass->Shutdown();
+        delete lightClass;
+        lightClass = nullptr;
     }
 
     if (graphicClass != nullptr)

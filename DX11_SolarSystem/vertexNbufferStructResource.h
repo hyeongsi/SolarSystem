@@ -13,6 +13,13 @@ struct ConstantBuffer
 	XMMATRIX mProjection;
 };
 
+struct LightBufferType
+{
+	XMFLOAT4 diffuseColor;
+	XMFLOAT3 lightPosition;
+	float padding;
+};
+
 struct VertexType
 {
 	XMFLOAT3 pos;

@@ -8,6 +8,7 @@ class CameraClass;
 class ObjLoader;
 class ObjectClass;
 class GameTimer;
+class LightClass;
 class SystemClass
 {
 private:
@@ -19,6 +20,7 @@ private:
 	CameraClass* cameraClass = NULL;
 	ObjLoader* objLoader = NULL;
 	ObjectClass* objectClass = NULL;
+	LightClass* lightClass = NULL;
 
 	const char* loadFileName = "Sphere.obj";
 

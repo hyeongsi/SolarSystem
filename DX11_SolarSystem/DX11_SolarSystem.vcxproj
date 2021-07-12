@@ -149,6 +149,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="GraphicClass.h" />
+    <ClInclude Include="LightClass.h" />
     <ClInclude Include="ObjectClass.h" />
     <ClInclude Include="ObjLoader.h" />
     <ClInclude Include="Resource.h" />
@@ -161,6 +162,7 @@
     <ClCompile Include="DX11_SolarSystem.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="GraphicClass.cpp" />
+    <ClCompile Include="LightClass.cpp" />
     <ClCompile Include="ObjectClass.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
     <ClCompile Include="SystemClass.cpp" />
