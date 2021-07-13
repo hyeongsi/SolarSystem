@@ -76,3 +76,8 @@ float4 PS( PS_INPUT input) : SV_Target
 
     return outputColor;
 }
+
+float4 PSSolid( PS_INPUT input) : SV_Target
+{
+    return shaderTexture.Sample(sampleType, input.Tex);
+}

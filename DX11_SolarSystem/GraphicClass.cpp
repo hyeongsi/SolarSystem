@@ -79,6 +79,7 @@ void GraphicClass::Shutdown()
 
 	if (m_pVertexLayout)		m_pVertexLayout->Release();
 	if (m_pVertexShader)		m_pVertexShader->Release();
+	if (m_pSolidPixelShader)	m_pSolidPixelShader->Release();
 	if (m_pPixelShader)			m_pPixelShader->Release();
 	if (m_pDepthStencil)		m_pDepthStencil->Release();
 	if (m_pDepthStencilView)	m_pDepthStencilView->Release();
@@ -220,6 +221,7 @@ HRESULT GraphicClass::InitGraphicClass()
 
 	m_pImmediateContext->IASetInputLayout(m_pVertexLayout);
 
+	// 조명계산 포함 픽셀셰이더
 	ID3DBlob* pPSBlob = NULL;
 	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "PS", "ps_4_0", dwShaderFlags, 0, NULL, &pPSBlob, NULL, NULL);
 	if (FAILED(hr))
@@ -231,6 +233,21 @@ HRESULT GraphicClass::InitGraphicClass()
 
 	hr = m_pd3dDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &m_pPixelShader);
 	pPSBlob->Release();
+	if (FAILED(hr))
+		return hr;
+
+	// 조명 계산 제외 픽셀셰이더
+	ID3DBlob* pPSSolidBlob = NULL;
+	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "PSSolid", "ps_4_0", dwShaderFlags, 0, NULL, &pPSSolidBlob, NULL, NULL);
+	if (FAILED(hr))
+	{
+		MessageBox(NULL,
+			"fx error, (PSSolid)", "Error", MB_OK);
+		return hr;
+	}
+
+	hr = m_pd3dDevice->CreatePixelShader(pPSSolidBlob->GetBufferPointer(), pPSSolidBlob->GetBufferSize(), NULL, &m_pSolidPixelShader);
+	pPSSolidBlob->Release();
 	if (FAILED(hr))
 		return hr;
 
@@ -292,4 +309,19 @@ void GraphicClass::SetIAIndexBuffer(ID3D11Buffer* indexBuffer)
 vector<ID3D11ShaderResourceView*> GraphicClass::GetShaderResourceViewVector()
 {
 	return m_pSolarSystemTextureRV;
+}
+
+void GraphicClass::SetPixelShader(PixelShaderNumber pixelShaderNumver)
+{
+	switch (pixelShaderNumver)
+	{
+	case PixelShaderNumber::lightPixelShader:
+		m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+		break;
+	case PixelShaderNumber::normalPixelShader:
+		m_pImmediateContext->PSSetShader(m_pSolidPixelShader, NULL, 0);
+		break;
+	default:
+		break;
+	}
 }

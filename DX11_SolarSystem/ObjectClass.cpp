@@ -108,7 +108,7 @@ void ObjectClass::Update(ID3D11DeviceContext* m_pImmediateContext,  float deltaT
 
 	// 각 행성별 비율 : 109.25, 0.383, 0.950, 1, 0.532, 10.97, 9.14, 3.98, 3.87 
 	// 태양과의 거리 : 0, 579.1, 1082, 1496, 2279, 7785, 14340, 28710, 44950
-	// 공전속도 : 0, 48, 35 ,30, 24, 13, 9.6, 7, 23.5
+	// 궤도속도 : 0, 48, 35 ,30, 24, 13, 9.6, 7, 5
 	// 자전속도 : 1.9, 0.003, 0.0018, 0.4651, 0.2411, 12.6, 9.8, 2.59, 2.68
 	// 자전기울기 : 7.25, 0.01, 2.64, 23.44, 25.19, 3.12, 26.73, 82.23, 28.33
 
@@ -120,12 +120,20 @@ void ObjectClass::Update(ID3D11DeviceContext* m_pImmediateContext,  float deltaT
 	}
 }
 
-void ObjectClass::Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* cameraClass, vector<ID3D11ShaderResourceView*> shaderResourceView)
+void ObjectClass::Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* cameraClass, vector<ID3D11ShaderResourceView*> shaderResourceView, GraphicClass* graphicClass)
 {
 	m_pImmediateContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	for (int i = 0; i < SOLAR_SYSTEM_SIZE; i++)	// 태양,수금지화목토천해
 	{
+		if (i == 0)
+		{
+			graphicClass->SetPixelShader(PixelShaderNumber::normalPixelShader);
+		}
+		else
+		{
+			graphicClass->SetPixelShader(PixelShaderNumber::lightPixelShader);
+		}
 		constantBufferData[i].mWorld = XMMatrixTranspose(mWorld[i]);
 		constantBufferData[i].mView = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mView);
 		constantBufferData[i].mProjection = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mProjection);

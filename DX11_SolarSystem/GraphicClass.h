@@ -4,6 +4,7 @@
 #include <xnamath.h>
 #include <vector>
 #include <string>
+#include "vertexNbufferStructResource.h"
 
 using namespace std;
 
@@ -33,6 +34,7 @@ private:
 
     ID3D11VertexShader* m_pVertexShader = NULL;
     ID3D11PixelShader* m_pPixelShader = NULL;
+    ID3D11PixelShader* m_pSolidPixelShader = NULL;
     ID3D11InputLayout* m_pVertexLayout = NULL;
 
     vector<string> m_texturePath;
@@ -59,5 +61,6 @@ public:
 
     void SetIAVertexBuffer(ID3D11Buffer* vertexBuffer, UINT stride, UINT offset);
     void SetIAIndexBuffer(ID3D11Buffer* indexBuffer);
+    void SetPixelShader(PixelShaderNumber pixelShaderNumver);
 };
 

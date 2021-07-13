@@ -4,6 +4,7 @@
 #include <vector>
 #include "CameraClass.h"
 #include "vertexNbufferStructResource.h"
+#include "GraphicClass.h"
 
 class ObjectClass
 {
@@ -39,7 +40,8 @@ public:
     HRESULT CreateIndexBuffer(ID3D11Device* pd3dDevice);
 
     void Update(ID3D11DeviceContext* m_pImmediateContext, float deltaTime);
-    void Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* cameraClass, std::vector<ID3D11ShaderResourceView*> shaderResourceView);
+    void Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* cameraClass, 
+        std::vector<ID3D11ShaderResourceView*> shaderResourceView, GraphicClass* graphicClass);
 
     ObjectClass();
     ~ObjectClass();

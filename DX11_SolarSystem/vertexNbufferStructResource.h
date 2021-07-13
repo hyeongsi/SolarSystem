@@ -33,3 +33,9 @@ typedef struct
 	int tIndex1, tIndex2, tIndex3;
 	int nIndex1, nIndex2, nIndex3;
 }FaceType;
+
+enum class PixelShaderNumber
+{
+	lightPixelShader = 0,
+	normalPixelShader = 1,
+};
