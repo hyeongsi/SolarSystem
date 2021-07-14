@@ -1,7 +1,7 @@
 #pragma once
 #include <D3D11.h>
 #include <D3DX11.h>
-#include <xnamath.h>
+#include <DirectXMath.h>
 #include <vector>
 #include <string>
 #include "vertexNbufferStructResource.h"

@@ -39,6 +39,16 @@ UINT ObjectClass::GetOffset()
 	return offset;
 }
 
+std::vector<XMMATRIX> ObjectClass::GetWorldVector()
+{
+	return mWorld;
+}
+
+std::vector<float> ObjectClass::GetScaleVector()
+{
+	return scale;
+}
+
 void ObjectClass::DynamicAllocationVertices(const int size)
 {
 	delete[] m_vertices;
@@ -134,6 +144,7 @@ void ObjectClass::Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* 
 		{
 			graphicClass->SetPixelShader(PixelShaderNumber::lightPixelShader);
 		}
+
 		constantBufferData[i].mWorld = XMMatrixTranspose(mWorld[i]);
 		constantBufferData[i].mView = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mView);
 		constantBufferData[i].mProjection = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mProjection);

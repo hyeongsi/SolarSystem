@@ -1,6 +1,6 @@
 #pragma once
 #include <D3D11.h>
-#include <xnamath.h>
+#include <DirectXMath.h>
 #include <vector>
 #include "CameraClass.h"
 #include "vertexNbufferStructResource.h"
@@ -33,6 +33,8 @@ public:
     int GetIndexcount();
     UINT GetStride();
     UINT GetOffset();
+    std::vector<XMMATRIX> GetWorldVector();
+    std::vector<float> GetScaleVector();
 
     void DynamicAllocationVertices(const int size);
     void DynamicAllocationIndices(const int size);

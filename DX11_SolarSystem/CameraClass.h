@@ -1,7 +1,8 @@
 #pragma once
 #include <D3D11.h>
 #include <D3DX11.h>
-#include <xnamath.h>
+#include <DirectXMath.h>
+#include <vector>
 #include "vertexNbufferStructResource.h"
 
 class CameraClass
@@ -13,6 +14,9 @@ private:
 	XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
+	XMVECTOR originEye = XMVectorSet(0.0f, 70.0f, -100.0f, 0.0f);
+	XMVECTOR originAt = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
 	ID3D11Device* m_pd3dDevice = NULL;
 	ID3D11DeviceContext* m_pImmediateContext = NULL;
 	ID3D11Buffer* m_pConstantBuffer = NULL;
@@ -23,7 +27,9 @@ public:
 
 	ConstantBuffer* GetCoordinateConstantBuffer();
 	ID3D11Buffer* GetConstantBuffer();
-	void Update();
+	void SetCameraPosition();
+
+	void Update(std::vector<XMMATRIX> world, std::vector<float> scale);
 	void Shutdown();
 };
 
