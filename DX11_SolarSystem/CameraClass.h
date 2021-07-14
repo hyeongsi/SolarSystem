@@ -29,7 +29,7 @@ public:
 	ID3D11Buffer* GetConstantBuffer();
 	void SetCameraPosition();
 
-	void Update(std::vector<XMMATRIX> world, std::vector<float> scale);
+	void Update(std::vector<XMMATRIX> world);
 	void Shutdown();
 };
 

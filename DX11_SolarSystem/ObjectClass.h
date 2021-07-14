@@ -14,6 +14,8 @@ private:
     WORD* m_indices = NULL;
     ID3D11Buffer* m_pIndexBuffer = NULL;
     std::vector<XMMATRIX> mWorld;
+    std::vector<XMMATRIX> objectCameraWorld;
+
     std::vector<ConstantBuffer> constantBufferData;
     std::vector<float> scale;           // 크기
     std::vector<float> rotationAngle;   // 자전기울기
@@ -33,7 +35,7 @@ public:
     int GetIndexcount();
     UINT GetStride();
     UINT GetOffset();
-    std::vector<XMMATRIX> GetWorldVector();
+    std::vector<XMMATRIX> GetObjectCameraWorldVector();
     std::vector<float> GetScaleVector();
 
     void DynamicAllocationVertices(const int size);

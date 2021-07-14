@@ -39,9 +39,9 @@ UINT ObjectClass::GetOffset()
 	return offset;
 }
 
-std::vector<XMMATRIX> ObjectClass::GetWorldVector()
+std::vector<XMMATRIX> ObjectClass::GetObjectCameraWorldVector()
 {
-	return mWorld;
+	return objectCameraWorld;
 }
 
 std::vector<float> ObjectClass::GetScaleVector()
@@ -127,6 +127,8 @@ void ObjectClass::Update(ID3D11DeviceContext* m_pImmediateContext,  float deltaT
 	{
 		mWorld[i] = XMMatrixScaling(scale[i], scale[i], scale[i]) * XMMatrixRotationX(rotationAngle[i] * PI / 180.0f) * XMMatrixRotationY(accumDeltaTime * rotationSpeed[i])
 			* XMMatrixTranslation(-distance[i], 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime * revolutionSpeed[i]);
+
+		objectCameraWorld[i] = XMMatrixScaling(scale[i], scale[i], scale[i]) * XMMatrixTranslation(-distance[i], 0.0f, 0.0f) * XMMatrixRotationY(accumDeltaTime * revolutionSpeed[i]);
 	}
 }
 
@@ -163,6 +165,7 @@ ObjectClass::ObjectClass()
 	for (int i = 0; i < SOLAR_SYSTEM_SIZE; i++)
 	{
 		mWorld.emplace_back(XMMatrixIdentity());
+		objectCameraWorld.emplace_back(XMMatrixIdentity());
 		constantBufferData.emplace_back(constantBuffer);
 	}
 

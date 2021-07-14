@@ -138,7 +138,7 @@ void SystemClass::Run()
             graphicClass->Update();
             lightClass->Update();
             objectClass->Update(graphicClass->GetImmediateContext(), gameTimer->DeltaTime());
-            cameraClass->Update(objectClass->GetWorldVector(), objectClass->GetScaleVector());
+            cameraClass->Update(objectClass->GetObjectCameraWorldVector());
             objectClass->Render(graphicClass->GetImmediateContext(), cameraClass, graphicClass->GetShaderResourceViewVector(), graphicClass);
             graphicClass->Render();
         }

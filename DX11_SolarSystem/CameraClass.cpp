@@ -38,62 +38,54 @@ void CameraClass::SetCameraPosition()
 	coordinateConstantBuffer.mView = XMMatrixLookAtLH(Eye, At, Up);
 }
 
-void CameraClass::Update(std::vector<XMMATRIX> world, std::vector<float> scale)
+void CameraClass::Update(std::vector<XMMATRIX> world)
 {
 	if (GetAsyncKeyState(VK_F1))
 	{
-		XMVector4Transform(At, world[0]);
-		world[0] *= XMMatrixTranslation(0, scale[0], -scale[0]);
-		XMVector4Transform(Eye, world[0]);
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[1]);
+		Eye = XMVector3TransformCoord(XMVectorSet(3.0f, 0.0f, 0.0f, 0.0f), world[1]);
 		SetCameraPosition();
 	}
-	else if (GetAsyncKeyState(VK_F2))
+	else if (GetAsyncKeyState(VK_F2))	
 	{
-		XMVector4Transform(At, world[1]);
-		XMVector4Transform(Eye, world[1]);
-		Eye = XMVectorSet(XMVectorGetX(Eye), XMVectorGetY(Eye) + scale[1], XMVectorGetZ(Eye) - scale[1], XMVectorGetW(Eye));
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[2]);
+		Eye = XMVector3TransformCoord(XMVectorSet(3.0f, 0.0f, 0.0f, 0.0f), world[2]);
 		SetCameraPosition();
 	}
 	else if (GetAsyncKeyState(VK_F3))
 	{
-		XMVector4Transform(At, world[2]);
-		XMVector4Transform(Eye, world[2]);
-		Eye = XMVectorSet(XMVectorGetX(Eye), XMVectorGetY(Eye) + scale[2], XMVectorGetZ(Eye) - scale[2], XMVectorGetW(Eye));
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[3]);
+		Eye = XMVector3TransformCoord(XMVectorSet(3.0f, 0.0f, 0.0f, 0.0f), world[3]);
 		SetCameraPosition();
 	}
 	else if (GetAsyncKeyState(VK_F4))
 	{
-		XMVector4Transform(At, world[3]);
-		XMVector4Transform(Eye, world[3]);
-		Eye = XMVectorSet(XMVectorGetX(Eye), XMVectorGetY(Eye) + scale[3], XMVectorGetZ(Eye) - scale[3], XMVectorGetW(Eye));
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[4]);
+		Eye = XMVector3TransformCoord(XMVectorSet(3.0f, 0.0f, 0.0f, 0.0f), world[4]);
 		SetCameraPosition();
 	}
 	else if (GetAsyncKeyState(VK_F5))
 	{
-		XMVector4Transform(At, world[4]);
-		XMVector4Transform(Eye, world[4]);
-		Eye = XMVectorSet(XMVectorGetX(Eye), XMVectorGetY(Eye) + scale[4], XMVectorGetZ(Eye) - scale[4], XMVectorGetW(Eye));
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[5]);
+		Eye = XMVector3TransformCoord(XMVectorSet(3.0f, 0.0f, 0.0f, 0.0f), world[5]);
 		SetCameraPosition();
 	}
 	else if (GetAsyncKeyState(VK_F6))
 	{
-		XMVector4Transform(At, world[5]);
-		XMVector4Transform(Eye, world[5]);
-		Eye = XMVectorSet(XMVectorGetX(Eye), XMVectorGetY(Eye) + scale[5], XMVectorGetZ(Eye) - scale[5], XMVectorGetW(Eye));
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[6]);
+		Eye = XMVector3TransformCoord(XMVectorSet(3.0f, 0.0f, 0.0f, 0.0f), world[6]);
 		SetCameraPosition();
 	}
 	else if (GetAsyncKeyState(VK_F7))
 	{
-		XMVector4Transform(At, world[6]);
-		XMVector4Transform(Eye, world[6]);
-		Eye = XMVectorSet(XMVectorGetX(Eye), XMVectorGetY(Eye) + scale[6], XMVectorGetZ(Eye) - scale[6], XMVectorGetW(Eye));
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[7]);
+		Eye = XMVector3TransformCoord(XMVectorSet(3.0f, 0.0f, 0.0f, 0.0f), world[7]);
 		SetCameraPosition();
 	}
 	else if (GetAsyncKeyState(VK_F8))
 	{
-		XMVector4Transform(At, world[7]);
-		XMVector4Transform(Eye, world[7]);
-		Eye = XMVectorSet(XMVectorGetX(Eye), XMVectorGetY(Eye) + scale[7], XMVectorGetZ(Eye) - scale[7], XMVectorGetW(Eye));
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[8]);
+		Eye = XMVector3TransformCoord(XMVectorSet(3.0f, 0.0f, 0.0f, 0.0f), world[8]);
 		SetCameraPosition();
 	}
 	else
