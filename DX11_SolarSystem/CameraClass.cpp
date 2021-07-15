@@ -40,59 +40,71 @@ void CameraClass::SetCameraPosition()
 
 void CameraClass::Update(std::vector<XMMATRIX> world)
 {
-	if (GetAsyncKeyState(VK_F1))
-	{
-		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[1]);
-		Eye = XMVector3TransformCoord(XMVectorSet(3.0f, 0.0f, 0.0f, 0.0f), world[1]);
-		SetCameraPosition();
-	}
-	else if (GetAsyncKeyState(VK_F2))	
-	{
-		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[2]);
-		Eye = XMVector3TransformCoord(XMVectorSet(3.0f, 0.0f, 0.0f, 0.0f), world[2]);
-		SetCameraPosition();
-	}
-	else if (GetAsyncKeyState(VK_F3))
-	{
-		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[3]);
-		Eye = XMVector3TransformCoord(XMVectorSet(3.0f, 0.0f, 0.0f, 0.0f), world[3]);
-		SetCameraPosition();
-	}
-	else if (GetAsyncKeyState(VK_F4))
-	{
-		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[4]);
-		Eye = XMVector3TransformCoord(XMVectorSet(3.0f, 0.0f, 0.0f, 0.0f), world[4]);
-		SetCameraPosition();
-	}
-	else if (GetAsyncKeyState(VK_F5))
-	{
-		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[5]);
-		Eye = XMVector3TransformCoord(XMVectorSet(3.0f, 0.0f, 0.0f, 0.0f), world[5]);
-		SetCameraPosition();
-	}
-	else if (GetAsyncKeyState(VK_F6))
-	{
-		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[6]);
-		Eye = XMVector3TransformCoord(XMVectorSet(3.0f, 0.0f, 0.0f, 0.0f), world[6]);
-		SetCameraPosition();
-	}
-	else if (GetAsyncKeyState(VK_F7))
-	{
-		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[7]);
-		Eye = XMVector3TransformCoord(XMVectorSet(3.0f, 0.0f, 0.0f, 0.0f), world[7]);
-		SetCameraPosition();
-	}
-	else if (GetAsyncKeyState(VK_F8))
-	{
-		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[8]);
-		Eye = XMVector3TransformCoord(XMVectorSet(3.0f, 0.0f, 0.0f, 0.0f), world[8]);
-		SetCameraPosition();
-	}
-	else
+	static bool inputFunctionKey = false;
+
+	if (inputFunctionKey)
 	{
 		Eye = originEye;
 		At = originAt;
 		SetCameraPosition();
+		inputFunctionKey = false;
+	}
+
+	if (GetAsyncKeyState(VK_F1))
+	{
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[1]);
+		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[1]);
+		SetCameraPosition();
+		inputFunctionKey = true;
+	}
+	else if (GetAsyncKeyState(VK_F2))	
+	{
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[2]);
+		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[2]);
+		SetCameraPosition();
+		inputFunctionKey = true;
+	}
+	else if (GetAsyncKeyState(VK_F3))
+	{
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[3]);
+		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[3]);
+		SetCameraPosition();
+		inputFunctionKey = true;
+	}
+	else if (GetAsyncKeyState(VK_F4))
+	{
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[4]);
+		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[4]);
+		SetCameraPosition();
+		inputFunctionKey = true;
+	}
+	else if (GetAsyncKeyState(VK_F5))
+	{
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[5]);
+		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[5]);
+		SetCameraPosition();
+		inputFunctionKey = true;
+	}
+	else if (GetAsyncKeyState(VK_F6))
+	{
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[6]);
+		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[6]);
+		SetCameraPosition();
+		inputFunctionKey = true;
+	}
+	else if (GetAsyncKeyState(VK_F7))
+	{
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[7]);
+		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[7]);
+		SetCameraPosition();
+		inputFunctionKey = true;
+	}
+	else if (GetAsyncKeyState(VK_F8))
+	{
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[8]);
+		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[8]);
+		SetCameraPosition();
+		inputFunctionKey = true;
 	}
 
 	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);

@@ -9,6 +9,7 @@ class ObjLoader;
 class ObjectClass;
 class GameTimer;
 class LightClass;
+class SkyMapClass;
 class SystemClass
 {
 private:
@@ -21,6 +22,7 @@ private:
 	ObjLoader* objLoader = NULL;
 	ObjectClass* objectClass = NULL;
 	LightClass* lightClass = NULL;
+	SkyMapClass* skyMapClass = NULL;
 
 	const char* loadFileName = "Sphere.obj";
 

@@ -3,6 +3,7 @@
 //--------------------------------------------------------------------------------------
 Texture2D shaderTexture : register(t0);
 SamplerState sampleType : register(s0);
+TextureCube SkyMap;
 
 cbuffer MatrixBuffer : register(b0)
 {
@@ -34,6 +35,12 @@ struct PS_INPUT
 	float3 diffuse : TEXCOORD1;
 };
 
+struct SKYMAP_VS_OUTPUT
+{
+	float4 Pos : SV_POSITION;
+	float3 texCoord : TEXCOORD;
+};
+
 //--------------------------------------------------------------------------------------
 // Vertex Shader
 //--------------------------------------------------------------------------------------
@@ -60,6 +67,14 @@ PS_INPUT VS( VS_INPUT input )
     return output;
 }
 
+SKYMAP_VS_OUTPUT SKYMAP_VS( VS_INPUT input )
+{
+	SKYMAP_VS_OUTPUT output = (SKYMAP_VS_OUTPUT)0;
+	output.Pos = mul(input.Pos, View );
+	output.texCoord = input.Pos;
+
+	return output;
+}
 
 //--------------------------------------------------------------------------------------
 // Pixel Shader
@@ -80,4 +95,9 @@ float4 PS( PS_INPUT input) : SV_Target
 float4 PSSolid( PS_INPUT input) : SV_Target
 {
     return shaderTexture.Sample(sampleType, input.Tex);
+}
+
+float4 SKYMAP_PS(SKYMAP_VS_OUTPUT input) : SV_Target
+{
+	return SkyMap.Sample(sampleType, input.texCoord);
 }

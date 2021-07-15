@@ -5,6 +5,7 @@
 #include "ObjectClass.h"
 #include "GameTimer.h"
 #include "LightClass.h"
+#include "SkyMapClass.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -109,12 +110,18 @@ HRESULT SystemClass::InitWindow(int& nCmdShow)
     objectClass->DynamicAllocationVertices(objLoader->GetFaceCount() * 3);  // vertex, texture, normal 3개를 저장해야해서 face*3
     objectClass->DynamicAllocationIndices(objLoader->GetFaceCount() * 3);
 
+    skyMapClass = new SkyMapClass();
+    skyMapClass->DynamicAllocationVertices(objLoader->GetFaceCount() * 3);  // vertex, texture, normal 3개를 저장해야해서 face*3
+    skyMapClass->DynamicAllocationIndices(objLoader->GetFaceCount() * 3);
+
     objLoader->LoadObjVertexData(loadFileName, objectClass->GetVertices(), objectClass->GetIndices());  // 데이터 로드 + 저장
+    objLoader->LoadObjVertexData(loadFileName, skyMapClass->GetVertices(), skyMapClass->GetIndices());  // 데이터 로드 + 저장
 
     objectClass->CreateVertexBuffer(graphicClass->GetDevice()); // 버텍스 버퍼 생성
-    graphicClass->SetIAVertexBuffer(objectClass->GetVertexBuffer(), objectClass->GetStride(), objectClass->GetOffset());    // 버텍스 버퍼 등록
     objectClass->CreateIndexBuffer(graphicClass->GetDevice());   // 인덱스 버퍼 생성
-    graphicClass->SetIAIndexBuffer(objectClass->GetIndexBuffer());  // 인덱스 버퍼 등록
+
+    skyMapClass->CreateVertexBuffer();
+    skyMapClass->CreateIndexBuffer();
 
     return hr;
 }
@@ -137,9 +144,13 @@ void SystemClass::Run()
         {
             graphicClass->Update();
             lightClass->Update();
+
+            skyMapClass->Render();
+
             objectClass->Update(graphicClass->GetImmediateContext(), gameTimer->DeltaTime());
             cameraClass->Update(objectClass->GetObjectCameraWorldVector());
             objectClass->Render(graphicClass->GetImmediateContext(), cameraClass, graphicClass->GetShaderResourceViewVector(), graphicClass);
+
             graphicClass->Render();
         }
     }

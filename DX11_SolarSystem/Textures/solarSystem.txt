@@ -1,9 +1,0 @@
-Textures/SunColorMap.jpg
-Textures/MercuryColorMap.jpg
-Textures/VenusColorMap.jpg
-Textures/EarthColorMap.jpg
-Textures/MarsColorMap.jpg
-Textures/JupiterColorMap.jpg
-Textures/SaturnColorMap.jpg
-Textures/UranusColorMap.jpg
-Textures/NeptuneColorMap.jpg

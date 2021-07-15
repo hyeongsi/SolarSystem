@@ -153,6 +153,7 @@
     <ClInclude Include="ObjectClass.h" />
     <ClInclude Include="ObjLoader.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SkyMapClass.h" />
     <ClInclude Include="SystemClass.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="vertexNbufferStructResource.h" />
@@ -165,6 +166,7 @@
     <ClCompile Include="LightClass.cpp" />
     <ClCompile Include="ObjectClass.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="SkyMapClass.cpp" />
     <ClCompile Include="SystemClass.cpp" />
   </ItemGroup>
   <ItemGroup>
