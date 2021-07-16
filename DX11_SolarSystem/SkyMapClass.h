@@ -1,13 +1,13 @@
 #pragma once
 #include "vertexNbufferStructResource.h"
 
+class CameraClass;
+class GraphicClass;
 class SkyMapClass
 {
 private:
 	ID3D11Device* m_pd3dDevice = NULL;
 	ID3D11DeviceContext* m_pImmediateContext = NULL;
-	ID3D11Texture2D* m_pTexture = NULL;
-	ID3D11ShaderResourceView* m_pShaderResourceView = NULL;
 
 	VertexType* m_vertices = NULL;
 	ID3D11Buffer* m_pVertexBuffer = NULL;
@@ -16,6 +16,19 @@ private:
 
 	ID3D11VertexShader* m_pVertexShader = NULL;
 	ID3D11PixelShader* m_pPixelShader = NULL;
+
+	ConstantBuffer constantBufferData;
+	XMMATRIX world;
+
+	// »Ø∞Ê∏ ¿ª ¿ß«— ∏Æº“Ω∫ ∫‰
+	ID3D11Texture2D* g_pEnvMap = NULL;
+	ID3D11RenderTargetView* g_pEnvMapRTV = NULL;
+	ID3D11ShaderResourceView* g_pEnvMapSRV = NULL;
+
+	ID3D11Texture2D* g_pEnvMapDepth;
+	ID3D11DepthStencilView* g_pEnvMapDSV;
+
+	D3D11_VIEWPORT g_viewPortEnvMap;
 
 	const float scale = 1.0f;
 
@@ -35,7 +48,7 @@ public:
 
 	HRESULT CreateVertexBuffer();
 	HRESULT CreateIndexBuffer();
-	void Render();
+	void Render(CameraClass* cameraClass, GraphicClass* graphicClass);
 
 	void DynamicAllocationVertices(const int size);
 	void DynamicAllocationIndices(const int size);

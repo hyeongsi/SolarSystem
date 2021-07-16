@@ -31,6 +31,7 @@ private:
     ID3D11RenderTargetView* m_pRenderTargetView;
     ID3D11Texture2D* m_pDepthStencil;
     ID3D11DepthStencilView* m_pDepthStencilView;
+    ID3D11DepthStencilState* DSLessEqual;
 
     ID3D11VertexShader* m_pVertexShader = NULL;
     ID3D11PixelShader* m_pPixelShader = NULL;
@@ -61,6 +62,8 @@ public:
 
     void SetIAVertexBuffer(ID3D11Buffer* vertexBuffer, UINT stride, UINT offset);
     void SetIAIndexBuffer(ID3D11Buffer* indexBuffer);
+
+    void SetVertexShader();
     void SetPixelShader(PixelShaderNumber pixelShaderNumver);
 };
 

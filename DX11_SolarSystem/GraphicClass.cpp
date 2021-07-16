@@ -286,8 +286,6 @@ void GraphicClass::Update()
 	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, ClearColor);
 	m_pImmediateContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
-	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
 	m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerState);
 }
 
@@ -309,6 +307,11 @@ void GraphicClass::SetIAIndexBuffer(ID3D11Buffer* indexBuffer)
 vector<ID3D11ShaderResourceView*> GraphicClass::GetShaderResourceViewVector()
 {
 	return m_pSolarSystemTextureRV;
+}
+
+void GraphicClass::SetVertexShader()
+{
+	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
 }
 
 void GraphicClass::SetPixelShader(PixelShaderNumber pixelShaderNumver)
