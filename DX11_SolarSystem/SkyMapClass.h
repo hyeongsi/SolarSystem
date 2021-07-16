@@ -6,6 +6,7 @@ class SkyMapClass
 private:
 	ID3D11Device* m_pd3dDevice = NULL;
 	ID3D11DeviceContext* m_pImmediateContext = NULL;
+	ID3D11Texture2D* m_pTexture = NULL;
 	ID3D11ShaderResourceView* m_pShaderResourceView = NULL;
 
 	VertexType* m_vertices = NULL;
@@ -22,6 +23,9 @@ private:
 	int indexCount = 0;
 
 	const char* fileName = "Textures/Space.dds";
+
+	UINT stride = sizeof(VertexType);
+	UINT offset = 0;
 
 public:
 	HRESULT Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* immediateContext);

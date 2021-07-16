@@ -111,6 +111,7 @@ HRESULT SystemClass::InitWindow(int& nCmdShow)
     objectClass->DynamicAllocationIndices(objLoader->GetFaceCount() * 3);
 
     skyMapClass = new SkyMapClass();
+    skyMapClass->Init(graphicClass->GetDevice(), graphicClass->GetImmediateContext());
     skyMapClass->DynamicAllocationVertices(objLoader->GetFaceCount() * 3);  // vertex, texture, normal 3개를 저장해야해서 face*3
     skyMapClass->DynamicAllocationIndices(objLoader->GetFaceCount() * 3);
 

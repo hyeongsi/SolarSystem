@@ -8,9 +8,21 @@ HRESULT SkyMapClass::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext* immedi
 	m_pd3dDevice = pd3dDevice;
 	m_pImmediateContext = immediateContext;
 
-	hr = D3DX11CreateShaderResourceViewFromFile(m_pd3dDevice, fileName, NULL, NULL, &m_pShaderResourceView, NULL);
+	hr = D3DX11CreateTextureFromFile(m_pd3dDevice, fileName, NULL, NULL, (ID3D11Resource**)&m_pTexture, NULL);
 	if (FAILED(hr))
 		return hr;
+
+	D3D11_TEXTURE2D_DESC SMTextureDesc;
+	m_pTexture->GetDesc(&SMTextureDesc);
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC SMViewDesc;
+	SMViewDesc.Format = SMTextureDesc.Format;
+	SMViewDesc.ViewDimension = D3D10_SRV_DIMENSION_TEXTURECUBE;
+	SMViewDesc.TextureCube.MipLevels = SMTextureDesc.MipLevels;
+	SMViewDesc.TextureCube.MostDetailedMip = 0;
+
+	hr = m_pd3dDevice->CreateShaderResourceView(m_pTexture, &SMViewDesc, &m_pShaderResourceView);
+
 
 	ID3DBlob* pVSBlob = NULL;
 	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG;
@@ -121,11 +133,13 @@ void SkyMapClass::DynamicAllocationIndices(const int size)
 
 void SkyMapClass::Render()
 {
+	m_pImmediateContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+	m_pImmediateContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
 	//m_pImmediateContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
 
-	//m_pImmediateContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
-	//m_pImmediateContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
 
 	//constantBufferData[i].mWorld = XMMatrixTranspose(mWorld[i]);
 	//constantBufferData[i].mView = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mView);
