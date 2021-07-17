@@ -94,4 +94,12 @@
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="skymap.fx">
+      <Filter>소스 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="temp.fx">
+      <Filter>소스 파일</Filter>
+    </FxCompile>
+  </ItemGroup>
 </Project>
