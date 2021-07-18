@@ -67,7 +67,7 @@ HRESULT SkyMapClass::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext* immedi
 	}
 
 	ID3DBlob* pPSBlob = NULL;
-	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "PSSolid", "ps_4_0", dwShaderFlags, 0, NULL, &pPSBlob, NULL, NULL);
+	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "SKYMAP_PS", "ps_4_0", dwShaderFlags, 0, NULL, &pPSBlob, NULL, NULL);
 	if (FAILED(hr))
 	{
 		MessageBox(NULL,

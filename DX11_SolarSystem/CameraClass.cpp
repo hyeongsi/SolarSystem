@@ -33,6 +33,66 @@ ID3D11Buffer* CameraClass::GetConstantBuffer()
 	return m_pConstantBuffer;
 }
 
+void CameraClass::SetFixedViewPoint(bool* inputFunctionKey, std::vector<XMMATRIX> world)
+{
+	if (GetAsyncKeyState(VK_F1))
+	{
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[1]);
+		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[1]);
+		SetCameraPosition();
+		*inputFunctionKey = true;
+	}
+	else if (GetAsyncKeyState(VK_F2))
+	{
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[2]);
+		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[2]);
+		SetCameraPosition();
+		*inputFunctionKey = true;
+	}
+	else if (GetAsyncKeyState(VK_F3))
+	{
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[3]);
+		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[3]);
+		SetCameraPosition();
+		*inputFunctionKey = true;
+	}
+	else if (GetAsyncKeyState(VK_F4))
+	{
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[4]);
+		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[4]);
+		SetCameraPosition();
+		*inputFunctionKey = true;
+	}
+	else if (GetAsyncKeyState(VK_F5))
+	{
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[5]);
+		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[5]);
+		SetCameraPosition();
+		*inputFunctionKey = true;
+	}
+	else if (GetAsyncKeyState(VK_F6))
+	{
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[6]);
+		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[6]);
+		SetCameraPosition();
+		*inputFunctionKey = true;
+	}
+	else if (GetAsyncKeyState(VK_F7))
+	{
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[7]);
+		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[7]);
+		SetCameraPosition();
+		*inputFunctionKey = true;
+	}
+	else if (GetAsyncKeyState(VK_F8))
+	{
+		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[8]);
+		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[8]);
+		SetCameraPosition();
+		*inputFunctionKey = true;
+	}
+}
+
 void CameraClass::SetCameraPosition()
 {
 	coordinateConstantBuffer.mView = XMMatrixLookAtLH(Eye, At, Up);
@@ -55,62 +115,7 @@ void CameraClass::Update(std::vector<XMMATRIX> world)
 		inputFunctionKey = false;
 	}
 
-	if (GetAsyncKeyState(VK_F1))
-	{
-		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[1]);
-		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[1]);
-		SetCameraPosition();
-		inputFunctionKey = true;
-	}
-	else if (GetAsyncKeyState(VK_F2))	
-	{
-		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[2]);
-		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[2]);
-		SetCameraPosition();
-		inputFunctionKey = true;
-	}
-	else if (GetAsyncKeyState(VK_F3))
-	{
-		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[3]);
-		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[3]);
-		SetCameraPosition();
-		inputFunctionKey = true;
-	}
-	else if (GetAsyncKeyState(VK_F4))
-	{
-		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[4]);
-		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[4]);
-		SetCameraPosition();
-		inputFunctionKey = true;
-	}
-	else if (GetAsyncKeyState(VK_F5))
-	{
-		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[5]);
-		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[5]);
-		SetCameraPosition();
-		inputFunctionKey = true;
-	}
-	else if (GetAsyncKeyState(VK_F6))
-	{
-		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[6]);
-		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[6]);
-		SetCameraPosition();
-		inputFunctionKey = true;
-	}
-	else if (GetAsyncKeyState(VK_F7))
-	{
-		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[7]);
-		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[7]);
-		SetCameraPosition();
-		inputFunctionKey = true;
-	}
-	else if (GetAsyncKeyState(VK_F8))
-	{
-		At = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), world[8]);
-		Eye = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 3.0f, 0.0f), world[8]);
-		SetCameraPosition();
-		inputFunctionKey = true;
-	}
+	SetFixedViewPoint(&inputFunctionKey, world);
 
 	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 }

@@ -29,6 +29,7 @@ public:
 	ID3D11Buffer* GetConstantBuffer();
 	XMVECTOR GetCameraEye();
 	void SetCameraPosition();
+	void SetFixedViewPoint(bool* inputFunctionKey, std::vector<XMMATRIX> world);
 
 	void Update(std::vector<XMMATRIX> world);
 	void Shutdown();
