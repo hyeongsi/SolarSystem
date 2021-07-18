@@ -11,7 +11,7 @@ private:
 	ConstantBuffer coordinateConstantBuffer;
 
 	XMVECTOR Eye = XMVectorSet(0.0f, 70.0f, -100.0f, 0.0f);
-	XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMVECTOR At = XMVectorSet(0.0f, 0.0f, -2.0f, 0.0f);
 	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
 	XMVECTOR originEye = XMVectorSet(0.0f, 70.0f, -100.0f, 0.0f);
@@ -27,6 +27,7 @@ public:
 
 	ConstantBuffer* GetCoordinateConstantBuffer();
 	ID3D11Buffer* GetConstantBuffer();
+	XMVECTOR GetCameraEye();
 	void SetCameraPosition();
 
 	void Update(std::vector<XMMATRIX> world);

@@ -3,20 +3,21 @@
 //--------------------------------------------------------------------------------------
 Texture2D shaderTexture : register(t0);
 SamplerState sampleType : register(s0);
+TextureCube cubemap : register(t1);
 
 cbuffer MatrixBuffer : register(b0)
 {
 	matrix World;
 	matrix View;
 	matrix Projection;
-}
+};
 
 cbuffer LightBuffer
 {
 	float4 diffuseColor;
 	float3 lightPosition;
 	float padding;
-}
+};
 
 //--------------------------------------------------------------------------------------
 struct VS_INPUT
@@ -32,6 +33,12 @@ struct PS_INPUT
 	float2 Tex : TEXCOORD0;
 	float3 Norm : NORMAL;
 	float3 diffuse : TEXCOORD1;
+};
+
+struct VS_OUTPUT_SKY_MAP
+{
+	float4 Pos : SV_POSITION;
+	float3 Tex : TEXCOORD2;
 };
 
 //--------------------------------------------------------------------------------------
@@ -58,7 +65,20 @@ PS_INPUT VS( VS_INPUT input )
     output.diffuse = dot(-lightDir, worldNormal);
 
     return output;
-}
+};
+
+VS_OUTPUT_SKY_MAP SKYMAP_VS(VS_INPUT input)
+{
+	VS_OUTPUT_SKY_MAP output = (VS_OUTPUT_SKY_MAP)0;
+
+	output.Pos = mul( input.Pos, World );
+	output.Pos = mul( output.Pos, View );
+    	output.Pos = mul( output.Pos, Projection );
+
+	output.Tex = input.Pos;
+
+	return output;
+};
 
 //--------------------------------------------------------------------------------------
 // Pixel Shader
@@ -74,9 +94,14 @@ float4 PS( PS_INPUT input) : SV_Target
     outputColor = outputColor * textureColor;
 
     return outputColor;
-}
+};
 
 float4 PSSolid( PS_INPUT input) : SV_Target
 {
     return shaderTexture.Sample(sampleType, input.Tex);
-}
+};
+
+float4 SKYMAP_PS(VS_OUTPUT_SKY_MAP input) : SV_Target
+{
+    return cubemap.Sample(sampleType, input.Tex);
+};

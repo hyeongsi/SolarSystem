@@ -38,6 +38,11 @@ void CameraClass::SetCameraPosition()
 	coordinateConstantBuffer.mView = XMMatrixLookAtLH(Eye, At, Up);
 }
 
+XMVECTOR CameraClass::GetCameraEye()
+{
+	return Eye;
+}
+
 void CameraClass::Update(std::vector<XMMATRIX> world)
 {
 	static bool inputFunctionKey = false;

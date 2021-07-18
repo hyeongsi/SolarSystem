@@ -1,3 +1,1 @@
-﻿C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\skymap.fx(30,1): error X3003: redefinition of 'VS_OUTPUT_SKY_MAP'
-  
-  compilation failed; no code produced
+﻿  DX11_SolarSystem.vcxproj -> C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\Debug\DX11_SolarSystem.exe

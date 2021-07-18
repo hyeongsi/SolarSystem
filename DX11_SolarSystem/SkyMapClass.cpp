@@ -10,12 +10,61 @@ HRESULT SkyMapClass::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext* immedi
 	m_pd3dDevice = pd3dDevice;
 	m_pImmediateContext = immediateContext;
 
-	hr = D3DX11CreateShaderResourceViewFromFile(m_pd3dDevice, fileName, NULL, NULL, &m_pTextureView, 0);
+	D3D11_RASTERIZER_DESC RSDesc;
+	RSDesc.FillMode = D3D11_FILL_SOLID;
+	RSDesc.CullMode = D3D11_CULL_NONE;
+	RSDesc.FrontCounterClockwise = FALSE;
+	RSDesc.DepthBias = 0;
+	RSDesc.DepthBiasClamp = 0;
+	RSDesc.SlopeScaledDepthBias = 0;
+	RSDesc.DepthClipEnable = false;
+	RSDesc.ScissorEnable = false;
+	RSDesc.MultisampleEnable = false;
+	RSDesc.AntialiasedLineEnable = false;
+
+	hr = m_pd3dDevice->CreateRasterizerState(&RSDesc, &m_pRasterizerState);
+	if (FAILED(hr))
+	{
+		MessageBox(NULL,
+			"create rasterizerstate Error", "Error", MB_OK);
+		return hr;
+	}
+	////@@@@@@@
+	//D3DX11_IMAGE_LOAD_INFO loadSMInfo;
+	//loadSMInfo.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+
+	//ID3D11Texture2D* SMTexture = 0;
+	//hr = D3DX11CreateTextureFromFile(m_pd3dDevice, fileName, &loadSMInfo, 0, (ID3D11Resource**)&SMTexture, 0);
+
+	//D3D11_TEXTURE2D_DESC SMTextureDesc;
+	//SMTexture->GetDesc(&SMTextureDesc);
+
+	//D3D11_SHADER_RESOURCE_VIEW_DESC SMViewDesc;
+	//SMViewDesc.Format = SMTextureDesc.Format;
+	//SMViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+	//SMViewDesc.TextureCube.MipLevels = SMTextureDesc.MipLevels;
+	//SMViewDesc.TextureCube.MostDetailedMip = 0;
+	//hr = m_pd3dDevice->CreateShaderResourceView(SMTexture, &SMViewDesc, &m_pTextureView);
+	//if (FAILED(hr))
+	//{
+	//	MessageBox(NULL,
+	//		"ShaderResourceView Load Error", "Error", MB_OK);
+	//	return hr;
+	//}
+	////@@@@@@@
+
+	hr = D3DX11CreateShaderResourceViewFromFile(m_pd3dDevice, fileName, 0, 0, &m_pTextureView, 0);
+	if (FAILED(hr))
+	{
+		MessageBox(NULL,
+			"ShaderResourceView Load Error", "Error", MB_OK);
+		return hr;
+	}
 
 	ID3DBlob* pVSBlob = NULL;
 	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG;
-	wchar_t szfileName[20] = L"skymap.fx";
-	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "SKYMAP_VS", "vs_4_0", dwShaderFlags, 0, NULL, &pVSBlob, NULL, NULL);
+	wchar_t szfileName[20] = L"temp.fx";
+	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "VS", "vs_4_0", dwShaderFlags, 0, NULL, &pVSBlob, NULL, NULL);
 	if (FAILED(hr))
 	{
 		MessageBox(NULL,
@@ -31,7 +80,7 @@ HRESULT SkyMapClass::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext* immedi
 	}
 
 	ID3DBlob* pPSBlob = NULL;
-	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "SKYMAP_PS", "ps_4_0", dwShaderFlags, 0, NULL, &pPSBlob, NULL, NULL);
+	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "PSSolid", "ps_4_0", dwShaderFlags, 0, NULL, &pPSBlob, NULL, NULL);
 	if (FAILED(hr))
 	{
 		MessageBox(NULL,
@@ -129,17 +178,23 @@ void SkyMapClass::Render(CameraClass* cameraClass, GraphicClass* graphicClass)
 	m_pImmediateContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 	m_pImmediateContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
-	static float test = 0.0f;
-	test += 0.0005;
+	m_pImmediateContext->RSSetState(m_pRasterizerState);
+	ID3D11RenderTargetView* rendertargetView = graphicClass->GetRenderTargetView();
+	m_pImmediateContext->OMSetRenderTargets(1, &rendertargetView, NULL);
 
-	XMMATRIX world = XMMatrixScaling(50.0f, 50.0f, 50.0f) * XMMatrixRotationY(test);
-	constantBufferData.mWorld = XMMatrixTranspose(world);
+	XMMATRIX mWorld = XMMatrixScaling(1.0f, 1.0f, 1.0f) * 
+		XMMatrixTranslation(XMVectorGetX(cameraClass->GetCameraEye()), XMVectorGetY(cameraClass->GetCameraEye()), XMVectorGetZ(cameraClass->GetCameraEye()));
+
+	constantBufferData.mWorld = XMMatrixTranspose(mWorld);
 	constantBufferData.mView = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mView);
 	constantBufferData.mProjection = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mProjection);
+
 	m_pImmediateContext->UpdateSubresource(cameraClass->GetConstantBuffer(), 0, NULL, &constantBufferData, 0, 0);
 
 	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureView);
 	m_pImmediateContext->DrawIndexed(indexCount, 0, 0);
+
+	m_pImmediateContext->OMSetRenderTargets(1, &rendertargetView, graphicClass->GetDepthStencilView());
 }
 
 SkyMapClass::~SkyMapClass()

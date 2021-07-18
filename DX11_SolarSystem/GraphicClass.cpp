@@ -77,6 +77,7 @@ void GraphicClass::Shutdown()
 	m_texturePath.clear();
 	m_pSolarSystemTextureRV.clear();
 
+	if (m_pRasterizerState)		m_pRasterizerState->Release();
 	if (m_pVertexLayout)		m_pVertexLayout->Release();
 	if (m_pVertexShader)		m_pVertexShader->Release();
 	if (m_pSolidPixelShader)	m_pSolidPixelShader->Release();
@@ -277,12 +278,32 @@ HRESULT GraphicClass::InitGraphicClass()
 	if (FAILED(hr))
 		return hr;
 
+	D3D11_RASTERIZER_DESC RSDesc;
+	RSDesc.FillMode = D3D11_FILL_SOLID;
+	RSDesc.CullMode = D3D11_CULL_FRONT;
+	RSDesc.FrontCounterClockwise = FALSE;
+	RSDesc.DepthBias = 0;
+	RSDesc.DepthBiasClamp = 0;
+	RSDesc.SlopeScaledDepthBias = 0;
+	RSDesc.DepthClipEnable = false;
+	RSDesc.ScissorEnable = false;
+	RSDesc.MultisampleEnable = false;
+	RSDesc.AntialiasedLineEnable = false;
+
+	hr = m_pd3dDevice->CreateRasterizerState(&RSDesc, &m_pRasterizerState);
+	if (FAILED(hr))
+	{
+		MessageBox(NULL,
+			"(graphic)create rasterizerstate Error", "Error", MB_OK);
+		return hr;
+	}
+
 	return hr;
 }
 
 void GraphicClass::Update()
 {
-	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
+	float ClearColor[4] = { 0.0f, 0.0, 0.0f, 1.0f };
 	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, ClearColor);
 	m_pImmediateContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
@@ -307,6 +328,21 @@ void GraphicClass::SetIAIndexBuffer(ID3D11Buffer* indexBuffer)
 vector<ID3D11ShaderResourceView*> GraphicClass::GetShaderResourceViewVector()
 {
 	return m_pSolarSystemTextureRV;
+}
+
+ID3D11RenderTargetView* GraphicClass::GetRenderTargetView()
+{
+	return m_pRenderTargetView;
+}
+
+ID3D11DepthStencilView* GraphicClass::GetDepthStencilView()
+{
+	return m_pDepthStencilView;
+}
+
+ID3D11RasterizerState* GraphicClass::GetGraphicRasterizerState()
+{
+	return m_pRasterizerState;
 }
 
 void GraphicClass::SetVertexShader()
