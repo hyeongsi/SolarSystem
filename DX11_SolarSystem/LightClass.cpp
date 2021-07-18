@@ -17,7 +17,7 @@ HRESULT LightClass::Init(ID3D11Device* d3dDevice, ID3D11DeviceContext* immediate
 
 	lightBufferType.diffuseColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 	lightBufferType.lightPosition = { 0.0f, 0.0f, 0.0f };
-	lightBufferType.padding = 0.0f;
+	lightBufferType.padding = 3.0f;
 
 	return hr;
 }

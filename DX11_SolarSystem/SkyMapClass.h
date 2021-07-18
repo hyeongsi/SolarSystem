@@ -17,11 +17,12 @@ private:
 	ID3D11VertexShader* m_pVertexShader = NULL;
 	ID3D11PixelShader* m_pPixelShader = NULL;
 
-	ID3D11SamplerState* m_pTextureSampler = NULL;
 	ID3D11ShaderResourceView* m_pTextureView;
 
 	ConstantBuffer constantBufferData;
-	XMMATRIX world;
+
+	ID3D11RasterizerState* m_pRasterizerState = NULL;
+	ID3D11DepthStencilState* m_pDSLessEqual = NULL;
 
 	int vertexTypeCount = 0;
 	int indexCount = 0;

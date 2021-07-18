@@ -31,7 +31,6 @@ private:
     ID3D11RenderTargetView* m_pRenderTargetView;
     ID3D11Texture2D* m_pDepthStencil;
     ID3D11DepthStencilView* m_pDepthStencilView;
-    ID3D11DepthStencilState* DSLessEqual;
 
     ID3D11VertexShader* m_pVertexShader = NULL;
     ID3D11PixelShader* m_pPixelShader = NULL;
@@ -41,6 +40,8 @@ private:
     vector<string> m_texturePath;
     vector<ID3D11ShaderResourceView*> m_pSolarSystemTextureRV;
     ID3D11SamplerState* m_pSamplerState = NULL;
+
+    ID3D11RasterizerState* m_pRasterizerState = NULL;
 
     HRESULT LoadTexture(const char* filePath);
 
@@ -54,6 +55,9 @@ public:
     ID3D11Device* GetDevice();
     ID3D11DeviceContext* GetImmediateContext();
     vector<ID3D11ShaderResourceView*> GetShaderResourceViewVector();
+    ID3D11RenderTargetView* GetRenderTargetView();
+    ID3D11DepthStencilView* GetDepthStencilView();
+    ID3D11RasterizerState* GetGraphicRasterizerState();
 
     HRESULT InitGraphicClass();
 

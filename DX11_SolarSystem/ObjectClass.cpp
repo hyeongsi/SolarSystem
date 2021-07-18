@@ -156,6 +156,8 @@ void ObjectClass::Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* 
 		constantBufferData[i].mView = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mView);
 		constantBufferData[i].mProjection = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mProjection);
 
+		m_pImmediateContext->RSSetState(graphicClass->GetGraphicRasterizerState());
+
 		m_pImmediateContext->UpdateSubresource(cameraClass->GetConstantBuffer(), 0, NULL, &constantBufferData[i], 0, 0);
 		m_pImmediateContext->PSSetShaderResources(0, 1, &shaderResourceView[i]);
 		m_pImmediateContext->DrawIndexed(indexCount, 0, 0);
