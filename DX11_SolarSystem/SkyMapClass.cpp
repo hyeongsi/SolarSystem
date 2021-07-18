@@ -67,7 +67,7 @@ HRESULT SkyMapClass::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext* immedi
 	}
 
 	ID3DBlob* pPSBlob = NULL;
-	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "SKYMAP_PS", "ps_4_0", dwShaderFlags, 0, NULL, &pPSBlob, NULL, NULL);
+	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "PSSolid", "ps_4_0", dwShaderFlags, 0, NULL, &pPSBlob, NULL, NULL);
 	if (FAILED(hr))
 	{
 		MessageBox(NULL,
@@ -176,6 +176,7 @@ void SkyMapClass::Render(CameraClass* cameraClass, GraphicClass* graphicClass)
 	constantBufferData.mWorld = XMMatrixTranspose(mWorld);
 	constantBufferData.mView = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mView);
 	constantBufferData.mProjection = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mProjection);
+
 	m_pImmediateContext->UpdateSubresource(cameraClass->GetConstantBuffer(), 0, NULL, &constantBufferData, 0, 0);
 
 	m_pImmediateContext->PSSetShaderResources(1, 1, &(m_pTextureView));

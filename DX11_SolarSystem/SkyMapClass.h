@@ -27,7 +27,7 @@ private:
 	int vertexTypeCount = 0;
 	int indexCount = 0;
 
-	const char* fileName = "Textures/Space.dds";
+	const char* fileName = "Textures/images.jpg";
 
 	UINT stride = sizeof(VertexType);
 	UINT offset = 0;

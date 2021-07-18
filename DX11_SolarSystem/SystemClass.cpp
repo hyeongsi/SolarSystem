@@ -104,22 +104,22 @@ HRESULT SystemClass::InitWindow(int& nCmdShow)
 
     objLoader = new ObjLoader();
     objLoader->Reset();
-    objLoader->ReadFileCounts(loadFileName);    // .obj¸¦ ÅëÇØ °¢ µ¥ÀÌÅÍÀÇ °³¼ö¸¦ ±¸ÇÔ
+    objLoader->ReadFileCounts(loadFileName);    // .objï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     objectClass = new ObjectClass();
-    objectClass->DynamicAllocationVertices(objLoader->GetFaceCount() * 3);  // vertex, texture, normal 3°³¸¦ ÀúÀåÇØ¾ßÇØ¼­ face*3
+    objectClass->DynamicAllocationVertices(objLoader->GetFaceCount() * 3);  // vertex, texture, normal 3ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½Ø¼ï¿½ face*3
     objectClass->DynamicAllocationIndices(objLoader->GetFaceCount() * 3);
 
     skyMapClass = new SkyMapClass();
     skyMapClass->Init(graphicClass->GetDevice(), graphicClass->GetImmediateContext());
-    skyMapClass->DynamicAllocationVertices(objLoader->GetFaceCount() * 3);  // vertex, texture, normal 3°³¸¦ ÀúÀåÇØ¾ßÇØ¼­ face*3
+    skyMapClass->DynamicAllocationVertices(objLoader->GetFaceCount() * 3);  // vertex, texture, normal 3ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½Ø¼ï¿½ face*3
     skyMapClass->DynamicAllocationIndices(objLoader->GetFaceCount() * 3);
 
-    objLoader->LoadObjVertexData(loadFileName, objectClass->GetVertices(), objectClass->GetIndices());  // µ¥ÀÌÅÍ ·Îµå + ÀúÀå
-    objLoader->LoadObjVertexData(loadFileName, skyMapClass->GetVertices(), skyMapClass->GetIndices());  // µ¥ÀÌÅÍ ·Îµå + ÀúÀå
+    objLoader->LoadObjVertexData(loadFileName, objectClass->GetVertices(), objectClass->GetIndices());  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ + ï¿½ï¿½ï¿½ï¿½
+    objLoader->LoadObjVertexData(loadFileName, skyMapClass->GetVertices(), skyMapClass->GetIndices());  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ + ï¿½ï¿½ï¿½ï¿½
 
-    objectClass->CreateVertexBuffer(graphicClass->GetDevice()); // ¹öÅØ½º ¹öÆÛ »ı¼º
-    objectClass->CreateIndexBuffer(graphicClass->GetDevice());   // ÀÎµ¦½º ¹öÆÛ »ı¼º
+    objectClass->CreateVertexBuffer(graphicClass->GetDevice()); // ï¿½ï¿½ï¿½Ø½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    objectClass->CreateIndexBuffer(graphicClass->GetDevice());   // ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     skyMapClass->CreateVertexBuffer();
     skyMapClass->CreateIndexBuffer();
@@ -144,14 +144,14 @@ void SystemClass::Run()
         else
         {
             graphicClass->Update();
-
+           
             lightClass->Update();
             skyMapClass->Render(cameraClass, graphicClass);
 
             objectClass->Update(graphicClass->GetImmediateContext(), gameTimer->DeltaTime());
             cameraClass->Update(objectClass->GetObjectCameraWorldVector());
             objectClass->Render(graphicClass->GetImmediateContext(), cameraClass, graphicClass->GetShaderResourceViewVector(), graphicClass);
-
+            
             graphicClass->Render();
         }
     }

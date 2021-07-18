@@ -222,7 +222,7 @@ HRESULT GraphicClass::InitGraphicClass()
 
 	m_pImmediateContext->IASetInputLayout(m_pVertexLayout);
 
-	// Á¶¸í°è»ê Æ÷ÇÔ ÇÈ¼¿¼ÎÀÌ´õ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½È¼ï¿½ï¿½ï¿½ï¿½Ì´ï¿½
 	ID3DBlob* pPSBlob = NULL;
 	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "PS", "ps_4_0", dwShaderFlags, 0, NULL, &pPSBlob, NULL, NULL);
 	if (FAILED(hr))
@@ -237,7 +237,7 @@ HRESULT GraphicClass::InitGraphicClass()
 	if (FAILED(hr))
 		return hr;
 
-	// Á¶¸í °è»ê Á¦¿Ü ÇÈ¼¿¼ÎÀÌ´õ
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½È¼ï¿½ï¿½ï¿½ï¿½Ì´ï¿½
 	ID3DBlob* pPSSolidBlob = NULL;
 	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "PSSolid", "ps_4_0", dwShaderFlags, 0, NULL, &pPSSolidBlob, NULL, NULL);
 	if (FAILED(hr))
@@ -261,9 +261,9 @@ HRESULT GraphicClass::InitGraphicClass()
 
 	D3D11_SAMPLER_DESC sampDesc;
 	ZeroMemory(&sampDesc, sizeof(sampDesc));
-	// ÅØ½ºÃ³ Ãâ·Â Çü½Ä ÁöÁ¤ ºÎºÐ
-	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;  // È®´ë Ãà¼Ò ½Ã, ¹Ó¸Ê°£ ÇÊÅÍ Ã³¸® ÀüºÎ POINT, ¼±Çü»ùÇÃ¸µ ¼³Á¤
-	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;     // ÅØ½ºÃ³ ÁÂÇ¥¸¦ ¹Ýº¹ÇÑ´Ù.
+	// ï¿½Ø½ï¿½Ã³ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;  // È®ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½, ï¿½Ó¸Ê°ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ POINT, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¸ï¿½ ï¿½ï¿½ï¿½ï¿½
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;     // ï¿½Ø½ï¿½Ã³ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½Ýºï¿½ï¿½Ñ´ï¿½.
 	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
