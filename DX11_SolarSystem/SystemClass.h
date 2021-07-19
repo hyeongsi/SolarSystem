@@ -10,6 +10,7 @@ class ObjectClass;
 class GameTimer;
 class LightClass;
 class SkyMapClass;
+class SystemInputClass;
 class SystemClass
 {
 private:
@@ -23,6 +24,7 @@ private:
 	ObjectClass* objectClass = NULL;
 	LightClass* lightClass = NULL;
 	SkyMapClass* skyMapClass = NULL;
+	SystemInputClass* inputclass = NULL;
 
 	const char* loadFileName = "Sphere.obj";
 

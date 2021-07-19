@@ -6,6 +6,7 @@
 #include "GameTimer.h"
 #include "LightClass.h"
 #include "SkyMapClass.h"
+#include "SystemInputClass.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -76,6 +77,19 @@ HRESULT SystemClass::InitWindow(int& nCmdShow)
         return hr;
     }
 
+    inputclass = new SystemInputClass();
+    hr = inputclass->Init(m_hInst, m_hWnd, graphicClass->GetWidth(), graphicClass->GetHeight());
+    if (FAILED(hr))
+    {
+        inputclass->Shutdown();
+        delete inputclass;
+        inputclass = nullptr;
+
+        MessageBox(NULL,
+            "inputClass init Error ", "Error", MB_OK);
+        return hr;
+    }
+
     cameraClass = new CameraClass();
     hr = cameraClass->Init(graphicClass->GetWidth(), graphicClass->GetHeight(), graphicClass->GetDevice(), graphicClass->GetImmediateContext());
     if(FAILED(hr))
@@ -104,22 +118,22 @@ HRESULT SystemClass::InitWindow(int& nCmdShow)
 
     objLoader = new ObjLoader();
     objLoader->Reset();
-    objLoader->ReadFileCounts(loadFileName);    // .obj�� ���� �� �������� ������ ����
+    objLoader->ReadFileCounts(loadFileName);   
 
     objectClass = new ObjectClass();
-    objectClass->DynamicAllocationVertices(objLoader->GetFaceCount() * 3);  // vertex, texture, normal 3���� �����ؾ��ؼ� face*3
-    objectClass->DynamicAllocationIndices(objLoader->GetFaceCount() * 3);
+    objectClass->DynamicAllocationVertices(objLoader->GetFaceCount() * 3);  // vertex, texture, normal 
+    objectClass->DynamicAllocationIndices(objLoader->GetFaceCount() * 3);  // vertex, texture, normal 
 
     skyMapClass = new SkyMapClass();
     skyMapClass->Init(graphicClass->GetDevice(), graphicClass->GetImmediateContext());
-    skyMapClass->DynamicAllocationVertices(objLoader->GetFaceCount() * 3);  // vertex, texture, normal 3���� �����ؾ��ؼ� face*3
+    skyMapClass->DynamicAllocationVertices(objLoader->GetFaceCount() * 3);  // vertex, texture, normal 
     skyMapClass->DynamicAllocationIndices(objLoader->GetFaceCount() * 3);
 
-    objLoader->LoadObjVertexData(loadFileName, objectClass->GetVertices(), objectClass->GetIndices());  // ������ �ε� + ����
-    objLoader->LoadObjVertexData(loadFileName, skyMapClass->GetVertices(), skyMapClass->GetIndices());  // ������ �ε� + ����
+    objLoader->LoadObjVertexData(loadFileName, objectClass->GetVertices(), objectClass->GetIndices());  
+    objLoader->LoadObjVertexData(loadFileName, skyMapClass->GetVertices(), skyMapClass->GetIndices()); 
 
-    objectClass->CreateVertexBuffer(graphicClass->GetDevice()); // ���ؽ� ���� ����
-    objectClass->CreateIndexBuffer(graphicClass->GetDevice());   // �ε��� ���� ����
+    objectClass->CreateVertexBuffer(graphicClass->GetDevice()); 
+    objectClass->CreateIndexBuffer(graphicClass->GetDevice());  
 
     skyMapClass->CreateVertexBuffer();
     skyMapClass->CreateIndexBuffer();
@@ -143,6 +157,11 @@ void SystemClass::Run()
         }
         else
         {
+            if (!inputclass->Frame())   // 입력장치 상태 가져옴
+                break;
+            if (inputclass->IsEscapePressed())
+                break;
+
             graphicClass->Update();
            
             lightClass->Update();
@@ -199,6 +218,19 @@ void SystemClass::Shutdown()
         delete gameTimer;
         gameTimer = nullptr;
     }
+
+    if (skyMapClass != nullptr)
+    {
+        delete skyMapClass;
+        skyMapClass = nullptr;
+    }
+
+    if (inputclass != nullptr)
+    {
+        delete inputclass;
+        inputclass = nullptr;
+    }
+    
 }
 
 HWND* SystemClass::GetHwnd()
