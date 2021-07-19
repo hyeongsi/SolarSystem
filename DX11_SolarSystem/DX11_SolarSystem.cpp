@@ -5,7 +5,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
-    SystemClass* systemClass = new SystemClass;
+    SystemClass* systemClass = new SystemClass();
 
     if (!FAILED(systemClass->InitWindow(nCmdShow)))
     {

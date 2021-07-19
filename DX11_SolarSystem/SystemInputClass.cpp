@@ -5,6 +5,12 @@ SystemInputClass::SystemInputClass()
 	m_directInput = 0;
 	m_keyboard = 0;
 	m_mouse = 0;
+
+	// 키 입력 비활성화 처리
+	for (int i = 0; i < ARRAYSIZE(m_keys); i++)
+	{
+		m_keys[i] = false;
+	}
 }
 
 HRESULT SystemInputClass::Init(HINSTANCE hinstance, HWND hwnd, const int screenWidth, const int screenHeight)
@@ -73,6 +79,16 @@ bool SystemInputClass::Frame()
 	ProcessInput();
 
 	return true;
+}
+
+void SystemInputClass::KeyDown(unsigned int input)
+{
+	m_keys[input] = true;
+}
+
+void SystemInputClass::KeyUp(unsigned int input)
+{
+	m_keys[input] = false;
 }
 
 bool SystemInputClass::ReadKeyBoard()
@@ -147,6 +163,39 @@ void SystemInputClass::GetMouseLocation(int& mouseX, int& mouseY)
 {
 	mouseX = m_mouseX;
 	mouseY = m_mouseY;
+}
+
+void SystemInputClass::GetFunctionKeyPressed(unsigned int& key, bool& isKeyUp)
+{
+	bool isKeyDown = false;
+
+	for (int i = DIK_F1; i <= DIK_F8; i++)
+	{
+		if (m_keyboardState[i] & 0x80)
+		{
+			m_keys[i] = true;
+			key = i;
+			isKeyUp = false;
+			isKeyDown = true;
+			return;
+		}
+	}
+
+	if (!isKeyDown)
+	{
+		key = 0;
+		isKeyUp = false;
+	}
+
+	for (int i = DIK_F1; i <= DIK_F8; i++)
+	{
+		if (m_keys[i])
+		{
+			key = i;
+			isKeyUp = true;
+			return;
+		}
+	}
 }
 
 void SystemInputClass::Shutdown()

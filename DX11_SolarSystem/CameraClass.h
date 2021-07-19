@@ -5,6 +5,13 @@
 #include <vector>
 #include "vertexNbufferStructResource.h"
 
+typedef struct InputKey
+{
+	unsigned int key = 0;
+	bool isKeyup = false;
+};
+
+class SystemInputClass;
 class CameraClass
 {
 private:
@@ -21,6 +28,7 @@ private:
 	ID3D11DeviceContext* m_pImmediateContext = NULL;
 	ID3D11Buffer* m_pConstantBuffer = NULL;
 
+	InputKey inputKey;
 public:
 	HRESULT Init(const float width, const float height, 
 		ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pImmediateContext);
@@ -29,8 +37,9 @@ public:
 	ID3D11Buffer* GetConstantBuffer();
 	XMVECTOR GetCameraEye();
 	void SetCameraPosition();
-	void SetFixedViewPoint(bool* inputFunctionKey, std::vector<XMMATRIX> world);
+	void SetFixedViewPoint(std::vector<XMMATRIX> world);
 
+	void Input(SystemInputClass* inputClass);
 	void Update(std::vector<XMMATRIX> world);
 	void Shutdown();
 };

@@ -15,16 +15,22 @@ private:
 	int m_screenWidth, m_screenHeight;
 	int m_mouseX, m_mouseY;
 
+	bool m_keys[256];	 // 키 입력 유무 저장
+
 public:
 	SystemInputClass();
 	HRESULT Init(HINSTANCE hinstance, HWND hwnd, const int screenWidth, const int screenHeight);
 	bool Frame();
+
+	void KeyDown(unsigned int input);
+	void KeyUp(unsigned int input);
 
 	bool ReadKeyBoard();
 	bool ReadMouse();
 	void ProcessInput();
 	bool IsEscapePressed();
 	void GetMouseLocation(int& mouseX, int& mouseY);
+	void GetFunctionKeyPressed(unsigned int& key, bool& isKeyUp);
 
 	void Shutdown();
 };

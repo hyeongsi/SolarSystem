@@ -1,5 +1,4 @@
-﻿  SystemClass.cpp
-C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\SystemClass.cpp(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+﻿  CameraClass.cpp
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dxgitype.h(12,1): warning C4005: 'DXGI_STATUS_OCCLUDED': 매크로 재정의
 D:\Windows Kits\10\Include\10.0.18362.0\shared\winerror.h(55840): message : 'DXGI_STATUS_OCCLUDED'의 이전 정의를 참조하십시오.
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dxgitype.h(13,1): warning C4005: 'DXGI_STATUS_CLIPPED': 매크로 재정의
@@ -56,9 +55,9 @@ C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\d3d10.h(608,1):
 D:\Windows Kits\10\Include\10.0.18362.0\shared\winerror.h(56279): message : 'D3D10_ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS'의 이전 정의를 참조하십시오.
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\d3d10.h(609,1): warning C4005: 'D3D10_ERROR_FILE_NOT_FOUND': 매크로 재정의
 D:\Windows Kits\10\Include\10.0.18362.0\shared\winerror.h(56288): message : 'D3D10_ERROR_FILE_NOT_FOUND'의 이전 정의를 참조하십시오.
+C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\CameraClass.h(12,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'InputKey' 왼쪽은 무시됩니다.
   C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\SystemClass.cpp(93,36): warning C4316: 'CameraClass': 힙에 할당된 개체가 16에 맞추어져 있지 않을 수도 있습니다
-C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\SystemClass.cpp(94,77): warning C4244: '인수': 'UINT'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\SystemClass.cpp(94,50): warning C4244: '인수': 'UINT'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\SystemClass.cpp(127,36): warning C4316: 'SkyMapClass': 힙에 할당된 개체가 16에 맞추어져 있지 않을 수도 있습니다
+  SystemInputClass.cpp
+  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+  코드를 생성하고 있습니다...
   DX11_SolarSystem.vcxproj -> C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\Debug\DX11_SolarSystem.exe

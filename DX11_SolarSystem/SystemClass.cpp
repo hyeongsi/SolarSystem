@@ -8,7 +8,7 @@
 #include "SkyMapClass.h"
 #include "SystemInputClass.h"
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK SystemClass::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     PAINTSTRUCT ps;
     HDC hdc;
@@ -165,9 +165,10 @@ void SystemClass::Run()
             graphicClass->Update();
            
             lightClass->Update();
-            skyMapClass->Render(cameraClass, graphicClass);
-
+           
+            cameraClass->Input(inputclass);
             objectClass->Update(graphicClass->GetImmediateContext(), gameTimer->DeltaTime());
+            skyMapClass->Render(cameraClass, graphicClass);
             cameraClass->Update(objectClass->GetObjectCameraWorldVector());
             objectClass->Render(graphicClass->GetImmediateContext(), cameraClass, graphicClass->GetShaderResourceViewVector(), graphicClass);
             

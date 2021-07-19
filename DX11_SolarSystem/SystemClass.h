@@ -28,8 +28,12 @@ private:
 
 	const char* loadFileName = "Sphere.obj";
 
+	static SystemClass* systemClass;
+
+	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 public:
 	HRESULT InitWindow(int& nCmdShow);
+
 	void Run();
 	void Shutdown();
 
@@ -37,4 +41,3 @@ public:
 
 };
 
-static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
