@@ -61,6 +61,12 @@ HRESULT SystemInputClass::Init(HINSTANCE hinstance, HWND hwnd, const int screenW
 
 	m_mouse->Acquire();
 
+	// 키 미리 설정
+	moveKey[0] = DIK_W;
+	moveKey[1] = DIK_S;
+	moveKey[2] = DIK_A;
+	moveKey[3] = DIK_D;
+
 	return hr;
 }
 
@@ -195,6 +201,27 @@ void SystemInputClass::GetFunctionKeyPressed(unsigned int& key, bool& isKeyUp)
 			isKeyUp = true;
 			return;
 		}
+	}
+}
+
+void SystemInputClass::GetMoveKeyPressed(unsigned int& key)
+{
+	bool isKeyDown = false;
+
+	// wsad 순서
+	for (int i = 0; i < ARRAYSIZE(moveKey); i++)
+	{
+		if (m_keyboardState[moveKey[i]] & 0x80)
+		{
+			isKeyDown = true;
+			key = moveKey[i];
+			return;
+		}
+	}
+	
+	if (!isKeyDown)
+	{
+		key = 0;
 	}
 }
 

@@ -56,8 +56,6 @@ D:\Windows Kits\10\Include\10.0.18362.0\shared\winerror.h(56279): message : 'D3D
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\d3d10.h(609,1): warning C4005: 'D3D10_ERROR_FILE_NOT_FOUND': 매크로 재정의
 D:\Windows Kits\10\Include\10.0.18362.0\shared\winerror.h(56288): message : 'D3D10_ERROR_FILE_NOT_FOUND'의 이전 정의를 참조하십시오.
 C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\CameraClass.h(12,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'InputKey' 왼쪽은 무시됩니다.
+C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\CameraClass.h(21,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'InputMouseLocation' 왼쪽은 무시됩니다.
   C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-  SystemInputClass.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-  코드를 생성하고 있습니다...
   DX11_SolarSystem.vcxproj -> C:\Users\parks\Desktop\GitHub\DX11_SolarSystem\DX11_SolarSystem\Debug\DX11_SolarSystem.exe

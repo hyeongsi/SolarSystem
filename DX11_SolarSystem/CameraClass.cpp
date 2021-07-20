@@ -38,14 +38,14 @@ void CameraClass::SetFixedViewPoint(std::vector<XMMATRIX> world)
 {
 	int index = 0;
 
-	index = (inputKey.key - DIK_F1)+1;
+	index = (inputKey[0].key - DIK_F1)+1;
 
 	if (index < 1)
 		return;
 	if (index > 8)
 		return;
 
-	if (inputKey.isKeyup)
+	if (inputKey[0].isKeyup)
 	{
 		Eye = originEye;
 		At = originAt;
@@ -69,29 +69,56 @@ XMVECTOR CameraClass::GetCameraEye()
 	return Eye;
 }
 
-void CameraClass::Input(SystemInputClass* inputClass)
+void CameraClass::MoveCameraPosition(float deltaTime)
 {
-	static int currentMouseX = 0;
-	static int currentMouseY = 0;
+	static float moveSpeed = 200.0f;
 
-	static int prevMouseX = 0;
-	static int prevMouseY = 0;
+	if (!inputKey[1].key)
+		return;
 
-	inputClass->GetMouseLocation(currentMouseX, currentMouseY);	// 해당 값을 통해 view를 rotation 수행하여 시점 변환
+	switch (inputKey[1].key)
+	{
+	case DIK_W:
+		Eye += (XMVector4Normalize(At - Eye) * deltaTime * moveSpeed);
+		At += (XMVector4Normalize(At - Eye) * deltaTime * moveSpeed);
+		break;
 
-	// ... 시점 rotation
+	case DIK_A:
+		Eye += (XMVector4Normalize(XMVector3Cross(XMVector4Normalize(At - Eye), Up)) * deltaTime * moveSpeed);
+		At += (XMVector4Normalize(XMVector3Cross(XMVector4Normalize(At - Eye),Up)) * deltaTime * moveSpeed);
+		break;
 
+	case DIK_S:
+		Eye -= (XMVector4Normalize(At - Eye) * deltaTime * moveSpeed);
+		At -= (XMVector4Normalize(At - Eye) * deltaTime * moveSpeed);
+		break;
 
-	inputClass->GetFunctionKeyPressed(inputKey.key, inputKey.isKeyup);
+	case DIK_D:
+		Eye -= (XMVector4Normalize(XMVector3Cross(XMVector4Normalize(At - Eye), Up)) * deltaTime * moveSpeed);
+		At -= (XMVector4Normalize(XMVector3Cross(XMVector4Normalize(At - Eye), Up)) * deltaTime * moveSpeed);
+		break;
 
-	prevMouseX = currentMouseX;
-	prevMouseY = currentMouseY;
+	default:
+		break;
+	}
+
+	SetCameraPosition();
 }
 
-void CameraClass::Update(std::vector<XMMATRIX> world)
+void CameraClass::Update(SystemInputClass* inputClass, std::vector<XMMATRIX> world, float deltaTime)
 {
+	inputClass->GetMouseLocation(inputMouseLocation.currentMouseX, inputMouseLocation.currentMouseY);	// 해당 값을 통해 view를 rotation 수행하여 시점 변환
+
+	inputClass->GetFunctionKeyPressed(inputKey[0].key, inputKey[0].isKeyup);
 	SetFixedViewPoint(world);
+
+	inputClass->GetMoveKeyPressed(inputKey[1].key);
+	MoveCameraPosition(deltaTime);
+
 	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+
+	inputMouseLocation.prevMouseX = inputMouseLocation.currentMouseX;
+	inputMouseLocation.prevMouseY = inputMouseLocation.currentMouseY;
 }
 
 void CameraClass::Shutdown()

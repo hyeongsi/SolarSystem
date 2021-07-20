@@ -166,10 +166,9 @@ void SystemClass::Run()
            
             lightClass->Update();
            
-            cameraClass->Input(inputclass);
             objectClass->Update(graphicClass->GetImmediateContext(), gameTimer->DeltaTime());
             skyMapClass->Render(cameraClass, graphicClass);
-            cameraClass->Update(objectClass->GetObjectCameraWorldVector());
+            cameraClass->Update(inputclass, objectClass->GetObjectCameraWorldVector(), gameTimer->DeltaTime());
             objectClass->Render(graphicClass->GetImmediateContext(), cameraClass, graphicClass->GetShaderResourceViewVector(), graphicClass);
             
             graphicClass->Render();

@@ -16,6 +16,7 @@ private:
 	int m_mouseX, m_mouseY;
 
 	bool m_keys[256];	 // 키 입력 유무 저장
+	unsigned int moveKey[4];
 
 public:
 	SystemInputClass();
@@ -31,6 +32,7 @@ public:
 	bool IsEscapePressed();
 	void GetMouseLocation(int& mouseX, int& mouseY);
 	void GetFunctionKeyPressed(unsigned int& key, bool& isKeyUp);
+	void GetMoveKeyPressed(unsigned int& key);
 
 	void Shutdown();
 };

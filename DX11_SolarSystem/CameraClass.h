@@ -11,6 +11,15 @@ typedef struct InputKey
 	bool isKeyup = false;
 };
 
+typedef struct InputMouseLocation
+{
+	int currentMouseX = 0;
+	int currentMouseY = 0;
+
+	int prevMouseX = -1;
+	int prevMouseY = -1;
+};
+
 class SystemInputClass;
 class CameraClass
 {
@@ -28,7 +37,8 @@ private:
 	ID3D11DeviceContext* m_pImmediateContext = NULL;
 	ID3D11Buffer* m_pConstantBuffer = NULL;
 
-	InputKey inputKey;
+	InputKey inputKey[2];	// function, wsad
+	InputMouseLocation inputMouseLocation;
 public:
 	HRESULT Init(const float width, const float height, 
 		ID3D11Device* m_pd3dDevice, ID3D11DeviceContext* m_pImmediateContext);
@@ -38,9 +48,9 @@ public:
 	XMVECTOR GetCameraEye();
 	void SetCameraPosition();
 	void SetFixedViewPoint(std::vector<XMMATRIX> world);
+	void MoveCameraPosition(float accumDeltaTime);
 
-	void Input(SystemInputClass* inputClass);
-	void Update(std::vector<XMMATRIX> world);
+	void Update(SystemInputClass* inputClass, std::vector<XMMATRIX> world, float deltaTime);
 	void Shutdown();
 };
 
