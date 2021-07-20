@@ -139,22 +139,8 @@ void SystemInputClass::ProcessInput()
 {
 	// 마지막 프레임 이후 입력장치에서 일어난 변화 처리
 	// 마우스 위치 변경, 마우스 커서 위치 유지
-	m_mouseX += m_mouseState.lX;
-	m_mouseY += m_mouseState.lY;
-
-	// 화면에서 마우스가 벗어날 경우, 벗어나지 않도록 0으로 변경
-	if (m_mouseX < 0)
-		m_mouseX = 0;
-
-	if (m_mouseY < 0)
-		m_mouseY = 0;
-
-	// 위와 마찬가지로 벗어나지 않도록 처리
-	if (m_mouseX > m_screenWidth)
-		m_mouseX = m_screenWidth;
-
-	if (m_mouseY > m_screenHeight)
-		m_mouseY = m_screenHeight;
+	m_mouseX = m_mouseState.lX;
+	m_mouseY = m_mouseState.lY;
 }
 
 bool SystemInputClass::IsEscapePressed()
@@ -223,6 +209,11 @@ void SystemInputClass::GetMoveKeyPressed(unsigned int& key)
 	{
 		key = 0;
 	}
+}
+
+DIMOUSESTATE* SystemInputClass::GetMouseState()
+{
+	return &m_mouseState;
 }
 
 void SystemInputClass::Shutdown()

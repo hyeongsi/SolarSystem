@@ -69,9 +69,34 @@ XMVECTOR CameraClass::GetCameraEye()
 	return Eye;
 }
 
-void CameraClass::MoveCameraPosition(float deltaTime)
+void CameraClass::HandleMouseMovement(float deltaTime)
 {
-	static float moveSpeed = 200.0f;
+	static float moveSpeed = 500.0f;
+
+	if (inputMouseLocation.diffMouseX > 0)	// 마우스 우측 이동
+	{
+		At -= deltaTime * XMVector4Normalize(XMVector3Cross(XMVector4Normalize(At - Eye), Up)) * moveSpeed;
+	}
+	else if (inputMouseLocation.diffMouseX < 0)	// 마우스 좌측 이동
+	{
+		At += deltaTime * XMVector4Normalize(XMVector3Cross(XMVector4Normalize(At - Eye), Up)) * moveSpeed;
+	}
+
+	if(inputMouseLocation.diffMouseY > 0)	// 마우스 상단 이동
+	{
+		At -= deltaTime * XMVector4Normalize(Up) * moveSpeed;
+	}
+	else if (inputMouseLocation.diffMouseY < 0)	// 마우스 하단 이동
+	{
+		At += deltaTime * XMVector4Normalize(Up) * moveSpeed;
+	}
+
+	SetCameraPosition();
+}
+
+void CameraClass::HandleKeyboardMovement(float deltaTime)
+{
+	static float moveSpeed = 300.0;
 
 	if (!inputKey[1].key)
 		return;
@@ -107,18 +132,16 @@ void CameraClass::MoveCameraPosition(float deltaTime)
 
 void CameraClass::Update(SystemInputClass* inputClass, std::vector<XMMATRIX> world, float deltaTime)
 {
-	inputClass->GetMouseLocation(inputMouseLocation.currentMouseX, inputMouseLocation.currentMouseY);	// 해당 값을 통해 view를 rotation 수행하여 시점 변환
+	inputClass->GetMouseLocation(inputMouseLocation.diffMouseX, inputMouseLocation.diffMouseY);	// 해당 값을 통해 view를 rotation 수행하여 시점 변환
+	HandleMouseMovement(deltaTime);
 
 	inputClass->GetFunctionKeyPressed(inputKey[0].key, inputKey[0].isKeyup);
 	SetFixedViewPoint(world);
 
 	inputClass->GetMoveKeyPressed(inputKey[1].key);
-	MoveCameraPosition(deltaTime);
+	HandleKeyboardMovement(deltaTime);
 
 	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
-
-	inputMouseLocation.prevMouseX = inputMouseLocation.currentMouseX;
-	inputMouseLocation.prevMouseY = inputMouseLocation.currentMouseY;
 }
 
 void CameraClass::Shutdown()

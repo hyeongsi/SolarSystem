@@ -13,11 +13,8 @@ typedef struct InputKey
 
 typedef struct InputMouseLocation
 {
-	int currentMouseX = 0;
-	int currentMouseY = 0;
-
-	int prevMouseX = -1;
-	int prevMouseY = -1;
+	int diffMouseX = 0;
+	int diffMouseY = 0;
 };
 
 class SystemInputClass;
@@ -48,7 +45,8 @@ public:
 	XMVECTOR GetCameraEye();
 	void SetCameraPosition();
 	void SetFixedViewPoint(std::vector<XMMATRIX> world);
-	void MoveCameraPosition(float accumDeltaTime);
+	void HandleMouseMovement(float deltaTime);
+	void HandleKeyboardMovement(float deltaTime);
 
 	void Update(SystemInputClass* inputClass, std::vector<XMMATRIX> world, float deltaTime);
 	void Shutdown();

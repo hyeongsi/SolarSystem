@@ -34,6 +34,8 @@ public:
 	void GetFunctionKeyPressed(unsigned int& key, bool& isKeyUp);
 	void GetMoveKeyPressed(unsigned int& key);
 
+	DIMOUSESTATE* GetMouseState();
+
 	void Shutdown();
 };
 
