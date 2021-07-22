@@ -27,8 +27,8 @@ private:
 	XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-	XMVECTOR originEye = XMVectorSet(0.0f, 50.0f, -150.0f, 0.0f);
-	XMVECTOR originAt = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMVECTOR prevEye;
+	XMVECTOR prevAt;
 
 	ID3D11Device* m_pd3dDevice = NULL;
 	ID3D11DeviceContext* m_pImmediateContext = NULL;

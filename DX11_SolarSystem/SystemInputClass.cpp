@@ -183,6 +183,7 @@ void SystemInputClass::GetFunctionKeyPressed(unsigned int& key, bool& isKeyUp)
 	{
 		if (m_keys[i])
 		{
+			m_keys[i] = false;
 			key = i;
 			isKeyUp = true;
 			return;

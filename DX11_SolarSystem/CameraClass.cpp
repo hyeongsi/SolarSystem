@@ -21,6 +21,9 @@ HRESULT CameraClass::Init(const float width, const float height,
 	bufferDesc.CPUAccessFlags = 0;
 	hr = m_pd3dDevice->CreateBuffer(&bufferDesc, NULL, &m_pConstantBuffer);
 
+	prevEye = Eye;
+	prevAt = At;
+
 	return hr;
 }
 
@@ -47,8 +50,8 @@ void CameraClass::SetFixedViewPoint(std::vector<XMMATRIX> world)
 
 	if (inputKey[0].isKeyup)
 	{
-		Eye = originEye;
-		At = originAt;
+		Eye = prevEye;
+		At = prevAt;
 		SetCameraPosition();
 	}
 	else
