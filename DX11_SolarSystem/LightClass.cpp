@@ -15,9 +15,11 @@ HRESULT LightClass::Init(ID3D11Device* d3dDevice, ID3D11DeviceContext* immediate
 	bufferDesc.CPUAccessFlags = 0;
 	hr = m_pd3dDevice->CreateBuffer(&bufferDesc, NULL, &m_pLightBuffer);
 
-	lightBufferType.diffuseColor = { 1.0f, 1.0f, 1.0f, 1.0f };
-	lightBufferType.lightPosition = { 0.0f, 0.0f, 0.0f };
-	lightBufferType.padding = 3.0f;
+	lightBufferType.pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	lightBufferType.range = 270.0;
+	lightBufferType.att = XMFLOAT3(0.007f, 0.009f, 0.00009f);
+	lightBufferType.ambient = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	lightBufferType.diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	return hr;
 }

@@ -17,9 +17,19 @@ struct ConstantBuffer
 
 struct LightBufferType
 {
-	XMFLOAT4 diffuseColor;
-	XMFLOAT3 lightPosition;
-	float padding;
+	LightBufferType()
+	{
+		ZeroMemory(this, sizeof(LightBufferType));
+	}
+
+	XMFLOAT3 dir;
+	float pad1;
+	XMFLOAT3 pos;
+	float range;
+	XMFLOAT3 att;
+	float pad2;
+	XMFLOAT4 ambient;	// 주변
+	XMFLOAT4 diffuse;	// 확산
 };
 
 struct VertexType

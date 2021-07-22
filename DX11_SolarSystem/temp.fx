@@ -14,9 +14,12 @@ cbuffer MatrixBuffer : register(b0)
 
 cbuffer LightBuffer
 {
-	float4 diffuseColor;
-	float3 lightPosition;
-	float padding;
+	float3 lightDir;
+	float3 lightPos;
+	float lightRange;
+	float3 lightAtt;
+	float4 lightAmbient;
+	float4 lightDiffuse;
 };
 
 //--------------------------------------------------------------------------------------
@@ -30,9 +33,9 @@ struct VS_INPUT
 struct PS_INPUT
 {
 	float4 Pos : SV_POSITION;
+	float4 worldPos : POSITION;
 	float2 Tex : TEXCOORD;
 	float3 Norm : NORMAL;
-	float3 diffuse : TEXCOORD1;
 };
 
 struct VS_OUTPUT_SKY_MAP
@@ -49,20 +52,15 @@ PS_INPUT VS( VS_INPUT input )
     PS_INPUT output = (PS_INPUT)0;
 
     output.Pos = mul( input.Pos, World );
-   
+    output.worldPos = mul(input.Pos, World);
+
     output.Tex = input.Tex;
 
-    output.Norm = normalize(output.Norm);
-
-    float3 lightDir = normalize((float3)output.Pos - lightPosition);
+    output.Norm = normalize(input.Norm);
 
     output.Pos = mul( output.Pos, View );
     output.Pos = mul( output.Pos, Projection );
     output.Norm = mul( input.Norm, (float3x3)World );
-
-    float3 worldNormal = mul(input.Norm, (float3x3)World);
-    worldNormal = normalize(worldNormal);
-    output.diffuse = dot(-lightDir, worldNormal);
 
     return output;
 };
@@ -83,17 +81,35 @@ VS_OUTPUT_SKY_MAP SKYMAP_VS(PS_INPUT input)
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
-float4 PS( PS_INPUT input) : SV_Target
+float4 PS(PS_INPUT input) : SV_Target
 {
-    float4 textureColor = shaderTexture.Sample(sampleType, input.Tex);
-   
-    float4 diffuse = saturate(float4(input.diffuse, 1));
+	input.Norm = normalize(input.Norm);
+   	float4 diffuse = shaderTexture.Sample(sampleType, input.Tex);
 
-    float4 outputColor = saturate(diffuse * diffuseColor);
+	float3 finalColor = float3(0.0f, 0.0f, 0.0f);
 
-    outputColor = outputColor * textureColor;
+	float3 lightToPixelVec = lightPos - input.worldPos;
 
-    return outputColor;
+	float d = length(lightToPixelVec);
+
+	float3 finalAmbient = diffuse * lightAmbient;
+
+	if (d > lightRange)
+		return float4(finalAmbient, diffuse.a);
+
+	lightToPixelVec /= d;
+
+	float howMuchLight = dot(lightToPixelVec, input.Norm);
+
+	if (howMuchLight > 0.0f)
+	{
+		finalColor += howMuchLight * diffuse * lightDiffuse;
+		finalColor /= lightAtt[0] + (lightAtt[1] * d) + (lightAtt[2] * (d * d));
+	}
+
+	finalColor = saturate(finalColor + finalAmbient);
+
+	return float4(finalColor, diffuse.a);
 };
 
 float4 PSSolid( PS_INPUT input) : SV_Target
