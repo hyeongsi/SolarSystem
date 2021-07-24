@@ -1,9 +1,9 @@
-#pragma once
+ï»¿#pragma once
 #include <D3D11.h>
 #include <D3DX11.h>
 #include <DirectXMath.h>
 
-const int SOLAR_SYSTEM_SIZE = 9;	// ÅÂ¾ç,¼ö±ÝÁöÈ­¸ñÅäÃµÇØ
+const int SOLAR_SYSTEM_SIZE = 9;	// íƒœì–‘,ìˆ˜ê¸ˆì§€í™”ëª©í† ì²œí•´
 const float PI = 3.14f;
 
 using namespace DirectX;
@@ -28,8 +28,8 @@ struct LightBufferType
 	float range;
 	XMFLOAT3 att;
 	float pad2;
-	XMFLOAT4 ambient;	// ÁÖº¯
-	XMFLOAT4 diffuse;	// È®»ê
+	XMFLOAT4 ambient;	// ì£¼ë³€
+	XMFLOAT4 diffuse;	// í™•ì‚°
 };
 
 struct VertexType

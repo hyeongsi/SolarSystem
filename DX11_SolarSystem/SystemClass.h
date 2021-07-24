@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "framework.h"
 #include "resource.h"
 #include <D3D11.h>

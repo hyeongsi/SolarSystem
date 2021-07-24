@@ -1,4 +1,4 @@
-#include "GraphicClass.h"
+﻿#include "GraphicClass.h"
 #include "ObjLoader.h"
 #include "CameraClass.h"
 #include <d3dcompiler.h>
@@ -87,7 +87,6 @@ void GraphicClass::Shutdown()
 	if (m_pRenderTargetView)	m_pRenderTargetView->Release();
 	if (m_pSwapChain)			m_pSwapChain->Release();
 	if (m_pImmediateContext)	m_pImmediateContext->Release();
-	if (m_pImmediateContext)	m_pImmediateContext->Release();
 }
 
 UINT GraphicClass::GetWidth()
@@ -114,7 +113,7 @@ HRESULT GraphicClass::InitGraphicClass()
 {
 	HRESULT hr = S_OK;
 
-	UINT createDeviceFlags = 0;
+	UINT createDeviceFlags = D3D11_CREATE_DEVICE_DEBUG;
 
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
 	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
@@ -237,7 +236,6 @@ HRESULT GraphicClass::InitGraphicClass()
 	if (FAILED(hr))
 		return hr;
 
-	// ���� ��� ���� �ȼ����̴�
 	ID3DBlob* pPSSolidBlob = NULL;
 	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "PSSolid", "ps_4_0", dwShaderFlags, 0, NULL, &pPSSolidBlob, NULL, NULL);
 	if (FAILED(hr))
@@ -261,9 +259,9 @@ HRESULT GraphicClass::InitGraphicClass()
 
 	D3D11_SAMPLER_DESC sampDesc;
 	ZeroMemory(&sampDesc, sizeof(sampDesc));
-	// �ؽ�ó ��� ���� ���� �κ�
-	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;  // Ȯ�� ��� ��, �Ӹʰ� ���� ó�� ���� POINT, �������ø� ����
-	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;     // �ؽ�ó ��ǥ�� �ݺ��Ѵ�.
+
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; 
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;    
 	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;

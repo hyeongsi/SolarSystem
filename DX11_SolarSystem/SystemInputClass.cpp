@@ -1,4 +1,4 @@
-#include "SystemInputClass.h"
+ï»¿#include "SystemInputClass.h"
 
 SystemInputClass::SystemInputClass()
 {
@@ -6,7 +6,7 @@ SystemInputClass::SystemInputClass()
 	m_keyboard = 0;
 	m_mouse = 0;
 
-	// Å° ÀÔ·Â ºñÈ°¼ºÈ­ Ã³¸®
+	// í‚¤ ì…ë ¥ ë¹„í™œì„±í™” ì²˜ë¦¬
 	for (int i = 0; i < ARRAYSIZE(m_keys); i++)
 	{
 		m_keys[i] = false;
@@ -23,27 +23,27 @@ HRESULT SystemInputClass::Init(HINSTANCE hinstance, HWND hwnd, const int screenW
 	m_mouseX = 0;
 	m_mouseY = 0;
 
-	// Direct ÀÔ·Â ÀÎÅÍÆäÀÌ½º ÃÊ±âÈ­, °´Ã¼ »ı¼º
+	// Direct ì…ë ¥ ì¸í„°í˜ì´ìŠ¤ ì´ˆê¸°í™”, ê°ì²´ ìƒì„±
 	hr = DirectInput8Create(hinstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_directInput, NULL);
 	if (FAILED(hr))
 		return hr;
 
-	// À§¿¡¼­ ¾òÀº ÀÔ·Â °´Ã¼¸¦ ÅëÇØ Å°º¸µå °´Ã¼ »ı¼º
+	// ìœ„ì—ì„œ ì–»ì€ ì…ë ¥ ê°ì²´ë¥¼ í†µí•´ í‚¤ë³´ë“œ ê°ì²´ ìƒì„±
 	hr = m_directInput->CreateDevice(GUID_SysKeyboard, &m_keyboard, NULL);
 	if (FAILED(hr))
 		return hr;
 
-	// µ¥ÀÌÅÍ Æ÷¸ä ¼³Á¤, Å°º¸µå¸¦ »ç¿ëÇÑ´Ù°í ¾Ë·ÁÁÖ´Â ±×·±°Å ÀÎµí
+	// ë°ì´í„° í¬ë©§ ì„¤ì •, í‚¤ë³´ë“œë¥¼ ì‚¬ìš©í•œë‹¤ê³  ì•Œë ¤ì£¼ëŠ” ê·¸ëŸ°ê±° ì¸ë“¯
 	hr = m_keyboard->SetDataFormat(&c_dfDIKeyboard);
 	if (FAILED(hr))
 		return hr;
 
-	// Å°º¸µå Çù·Â ·¹º§ ¼³Á¤, ´Ù¸¥ ÇÁ·Î±×·¥¿¡¼­ Á¢±ÙÀ» Á¦¾î
+	// í‚¤ë³´ë“œ í˜‘ë ¥ ë ˆë²¨ ì„¤ì •, ë‹¤ë¥¸ í”„ë¡œê·¸ë¨ì—ì„œ ì ‘ê·¼ì„ ì œì–´
 	hr = m_keyboard->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_EXCLUSIVE);
 	if (FAILED(hr))
 		return hr;
 
-	// Å°º¸µå Á¢±Ù ±ÇÇÑ ¾ò±â
+	// í‚¤ë³´ë“œ ì ‘ê·¼ ê¶Œí•œ ì–»ê¸°
 	m_keyboard->Acquire();
 
 	hr = m_directInput->CreateDevice(GUID_SysMouse, &m_mouse, NULL);
@@ -61,7 +61,7 @@ HRESULT SystemInputClass::Init(HINSTANCE hinstance, HWND hwnd, const int screenW
 
 	m_mouse->Acquire();
 
-	// Å° ¹Ì¸® ¼³Á¤
+	// í‚¤ ë¯¸ë¦¬ ì„¤ì •
 	moveKey[0] = DIK_W;
 	moveKey[1] = DIK_S;
 	moveKey[2] = DIK_A;
@@ -104,7 +104,7 @@ bool SystemInputClass::ReadKeyBoard()
 	result = m_keyboard->GetDeviceState(sizeof(m_keyboardState), (LPVOID)&m_keyboardState);
 	if (FAILED(result))
 	{
-		// Æ÷Ä¿½º¸¦ ÀÒ¾ú°Å³ª acquireÀÌ µÇÁö ¾Ê´Â »óÈ²ÀÌ¸é
+		// í¬ì»¤ìŠ¤ë¥¼ ìƒì—ˆê±°ë‚˜ acquireì´ ë˜ì§€ ì•ŠëŠ” ìƒí™©ì´ë©´
 		if (result == DIERR_INPUTLOST || result == DIERR_NOTACQUIRED)
 		{
 			m_keyboard->Acquire();
@@ -123,13 +123,13 @@ bool SystemInputClass::ReadMouse()
 	result = m_mouse->GetDeviceState(sizeof(DIMOUSESTATE), &m_mouseState);
 	if (FAILED(result))
 	{
-		// Æ÷Ä¿½º¸¦ ÀÒ¾ú°Å³ª acquireÀÌ µÇÁö ¾Ê´Â »óÈ²ÀÌ¸é
+		// í¬ì»¤ìŠ¤ë¥¼ ìƒì—ˆê±°ë‚˜ acquireì´ ë˜ì§€ ì•ŠëŠ” ìƒí™©ì´ë©´
 		if (result == DIERR_INPUTLOST || result == DIERR_NOTACQUIRED)
 		{
 			m_mouse->Acquire();
 		}
 		else
-			return false;	// ´Ù¸¥ ¿¡·¯ »óÈ²ÀÏ °æ¿ì °­Á¦ Á¾·á
+			return false;	// ë‹¤ë¥¸ ì—ëŸ¬ ìƒí™©ì¼ ê²½ìš° ê°•ì œ ì¢…ë£Œ
 	}
 
 	return true;
@@ -137,8 +137,8 @@ bool SystemInputClass::ReadMouse()
 
 void SystemInputClass::ProcessInput()
 {
-	// ¸¶Áö¸· ÇÁ·¹ÀÓ ÀÌÈÄ ÀÔ·ÂÀåÄ¡¿¡¼­ ÀÏ¾î³­ º¯È­ Ã³¸®
-	// ¸¶¿ì½º À§Ä¡ º¯°æ, ¸¶¿ì½º Ä¿¼­ À§Ä¡ À¯Áö
+	// ë§ˆì§€ë§‰ í”„ë ˆì„ ì´í›„ ì…ë ¥ì¥ì¹˜ì—ì„œ ì¼ì–´ë‚œ ë³€í™” ì²˜ë¦¬
+	// ë§ˆìš°ìŠ¤ ìœ„ì¹˜ ë³€ê²½, ë§ˆìš°ìŠ¤ ì»¤ì„œ ìœ„ì¹˜ ìœ ì§€
 	m_mouseX = m_mouseState.lX;
 	m_mouseY = m_mouseState.lY;
 }
@@ -195,7 +195,7 @@ void SystemInputClass::GetMoveKeyPressed(unsigned int& key)
 {
 	bool isKeyDown = false;
 
-	// wsad ¼ø¼­
+	// wsad ìˆœì„œ
 	for (int i = 0; i < ARRAYSIZE(moveKey); i++)
 	{
 		if (m_keyboardState[moveKey[i]] & 0x80)

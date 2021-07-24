@@ -1,4 +1,4 @@
-#include "LightClass.h"
+﻿#include "LightClass.h"
 
 HRESULT LightClass::Init(ID3D11Device* d3dDevice, ID3D11DeviceContext* immediateContext)
 {

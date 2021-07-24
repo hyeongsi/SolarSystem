@@ -1,11 +1,11 @@
-#include "GameTimer.h"
+ï»¿#include "GameTimer.h"
 
 GameTimer::GameTimer()
 	: mSecondsPerCount(0.0), mDeltaTime(-1.0), mTick(0), mBaseTime(0), mPausedTime(0), mStopTime(0), mPrevTime(0), mCurrTime(0), mStopped(false)
 {
 	__int64 countsPerSec;
 	QueryPerformanceFrequency((LARGE_INTEGER*)&countsPerSec);
-	mSecondsPerCount = 1.0 / (double)countsPerSec;		// °³¼ö ´ç ÃÊ ¾ò±â
+	mSecondsPerCount = 1.0 / (double)countsPerSec;		// ê°œìˆ˜ ë‹¹ ì´ˆ ì–»ê¸°
 }
 
 float GameTimer::TotalTime() const
@@ -71,20 +71,20 @@ void GameTimer::Tick()
 		return;
 	}
 
-	// ÀÌ¹ø ÇÁ·¹ÀÓÀÇ ½Ã°£À» ¾ò´Â´Ù.
+	// ì´ë²ˆ í”„ë ˆì„ì˜ ì‹œê°„ì„ ì–»ëŠ”ë‹¤.
 	__int64 currTime;
 	QueryPerformanceCounter((LARGE_INTEGER*)&currTime);
 	mCurrTime = currTime;
 
-	// ÀÌ ½Ã°£°ú ÀÌÀü ÇÁ·¹ÀÓÀÇ ½Ã°£ÀÇ Â÷ÀÌ¸¦ ±¸ÇÑ´Ù.
+	// ì´ ì‹œê°„ê³¼ ì´ì „ í”„ë ˆì„ì˜ ì‹œê°„ì˜ ì°¨ì´ë¥¼ êµ¬í•œë‹¤.
 	mDeltaTime = (mCurrTime - mPrevTime) * mSecondsPerCount;
 
-	// ´ÙÀ½ ÇÁ·¹ÀÓÀ» ÁØºñÇÑ´Ù.
+	// ë‹¤ìŒ í”„ë ˆì„ì„ ì¤€ë¹„í•œë‹¤.
 	mPrevTime = mCurrTime;
 
-	// À½¼ö°¡ µÇÁö ¾Ê°Ô ÇÑ´Ù. SDK ¹®¼­È­ÀÇ CDXUTTimer Ç×¸ñ¿¡ µû¸£¸é,
-	// ÇÁ·Î¼¼¼­°¡ ÀıÀü ¸ğµå·Î µé¾î°¡°Å³ª ´Ù¸¥ ÇÁ·Î¼¼¼­¿Í ¾ûÅ°´Â °æ¿ì
-	// mDeltaTimeÀÌ À½¼ö°¡ µÉ ¼ö ÀÖ´Ù.
+	// ìŒìˆ˜ê°€ ë˜ì§€ ì•Šê²Œ í•œë‹¤. SDK ë¬¸ì„œí™”ì˜ CDXUTTimer í•­ëª©ì— ë”°ë¥´ë©´,
+	// í”„ë¡œì„¸ì„œê°€ ì ˆì „ ëª¨ë“œë¡œ ë“¤ì–´ê°€ê±°ë‚˜ ë‹¤ë¥¸ í”„ë¡œì„¸ì„œì™€ ì—‰í‚¤ëŠ” ê²½ìš°
+	// mDeltaTimeì´ ìŒìˆ˜ê°€ ë  ìˆ˜ ìˆë‹¤.
 	if (mDeltaTime < 0.0)
 	{
 		mDeltaTime = 0.0;

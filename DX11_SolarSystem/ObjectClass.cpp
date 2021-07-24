@@ -1,4 +1,4 @@
-#include "ObjectClass.h"
+ï»¿#include "ObjectClass.h"
 #include <fstream>
 
 using namespace std;
@@ -116,11 +116,11 @@ void ObjectClass::Update(ID3D11DeviceContext* m_pImmediateContext,  float deltaT
 	static float accumDeltaTime = 0.0f;
 	accumDeltaTime += deltaTime;
 
-	// °¢ Çà¼ºº° ºñÀ² : 109.25, 0.383, 0.950, 1, 0.532, 10.97, 9.14, 3.98, 3.87 
-	// ÅÂ¾ç°úÀÇ °Å¸® : 0, 579.1, 1082, 1496, 2279, 7785, 14340, 28710, 44950
-	// ±Ëµµ¼Óµµ : 0, 48, 35 ,30, 24, 13, 9.6, 7, 5
-	// ÀÚÀü¼Óµµ : 1.9, 0.003, 0.0018, 0.4651, 0.2411, 12.6, 9.8, 2.59, 2.68
-	// ÀÚÀü±â¿ï±â : 7.25, 0.01, 2.64, 23.44, 25.19, 3.12, 26.73, 82.23, 28.33
+	// ê° í–‰ì„±ë³„ ë¹„ìœ¨ : 109.25, 0.383, 0.950, 1, 0.532, 10.97, 9.14, 3.98, 3.87 
+	// íƒœì–‘ê³¼ì˜ ê±°ë¦¬ : 0, 579.1, 1082, 1496, 2279, 7785, 14340, 28710, 44950
+	// ê¶¤ë„ì†ë„ : 0, 48, 35 ,30, 24, 13, 9.6, 7, 5
+	// ìì „ì†ë„ : 1.9, 0.003, 0.0018, 0.4651, 0.2411, 12.6, 9.8, 2.59, 2.68
+	// ìì „ê¸°ìš¸ê¸° : 7.25, 0.01, 2.64, 23.44, 25.19, 3.12, 26.73, 82.23, 28.33
 
 	mWorld[0] = XMMatrixScaling(scale[0], scale[0], scale[0]) * XMMatrixRotationX(rotationAngle[0] * PI /180.0f) * XMMatrixRotationY(accumDeltaTime * rotationSpeed[0]);
 	for (int i = 1; i < SOLAR_SYSTEM_SIZE; i++)
@@ -138,7 +138,7 @@ void ObjectClass::Render(ID3D11DeviceContext* m_pImmediateContext, CameraClass* 
 
 	graphicClass->SetVertexShader();
 
-	for (int i = 0; i < SOLAR_SYSTEM_SIZE; i++)	// ÅÂ¾ç,¼ö±İÁöÈ­¸ñÅäÃµÇØ
+	for (int i = 0; i < SOLAR_SYSTEM_SIZE; i++)	// íƒœì–‘,ìˆ˜ê¸ˆì§€í™”ëª©í† ì²œí•´
 	{
 		if (i == 0)
 		{
@@ -186,23 +186,23 @@ ObjectClass::ObjectClass()
 		return;
 	}
 
-	// Å©±â, ÀÚÀü±â¿ï±â, ÀÚÀü¼Óµµ, °Å¸®, °øÀü¼Óµµ
+	// í¬ê¸°, ìì „ê¸°ìš¸ê¸°, ìì „ì†ë„, ê±°ë¦¬, ê³µì „ì†ë„
 	while (!fin.eof())
 	{
 		fin >> data;					
-		scale.emplace_back(data);				// Å©±â
+		scale.emplace_back(data);				// í¬ê¸°
 
 		fin >> data;
-		rotationAngle.emplace_back(data);		// ÀÚÀü±â¿ï±â
+		rotationAngle.emplace_back(data);		// ìì „ê¸°ìš¸ê¸°
 
 		fin >> data;
-		rotationSpeed.emplace_back(data);		// ÀÚÀü¼Óµµ
+		rotationSpeed.emplace_back(data);		// ìì „ì†ë„
 
 		fin >> data;
-		distance.emplace_back(data);			// °Å¸®
+		distance.emplace_back(data);			// ê±°ë¦¬
 
 		fin >> data;
-		revolutionSpeed.emplace_back(data);		// °øÀü¼Óµµ
+		revolutionSpeed.emplace_back(data);		// ê³µì „ì†ë„
 	}
 }
 

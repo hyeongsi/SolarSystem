@@ -1,4 +1,4 @@
-#include "SkyMapClass.h"
+﻿#include "SkyMapClass.h"
 #include "CameraClass.h"
 #include "GraphicClass.h"
 #include <d3dcompiler.h>

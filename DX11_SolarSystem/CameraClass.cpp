@@ -1,4 +1,4 @@
-#include "CameraClass.h"
+ï»¿#include "CameraClass.h"
 #include "SystemInputClass.h"
 
 HRESULT CameraClass::Init(const float width, const float height, 
@@ -76,20 +76,20 @@ void CameraClass::HandleMouseMovement(float deltaTime)
 {
 	static float moveSpeed = 500.0f;
 
-	if (inputMouseLocation.diffMouseX > 0)	// ¸¶¿ì½º ¿ìÃø ÀÌµ¿
+	if (inputMouseLocation.diffMouseX > 0)	// ë§ˆìš°ìŠ¤ ìš°ì¸¡ ì´ë™
 	{
 		At -= deltaTime * XMVector4Normalize(XMVector3Cross(XMVector4Normalize(At - Eye), Up)) * moveSpeed;
 	}
-	else if (inputMouseLocation.diffMouseX < 0)	// ¸¶¿ì½º ÁÂÃø ÀÌµ¿
+	else if (inputMouseLocation.diffMouseX < 0)	// ë§ˆìš°ìŠ¤ ì¢Œì¸¡ ì´ë™
 	{
 		At += deltaTime * XMVector4Normalize(XMVector3Cross(XMVector4Normalize(At - Eye), Up)) * moveSpeed;
 	}
 
-	if(inputMouseLocation.diffMouseY > 0)	// ¸¶¿ì½º »ó´Ü ÀÌµ¿
+	if(inputMouseLocation.diffMouseY > 0)	// ë§ˆìš°ìŠ¤ ìƒë‹¨ ì´ë™
 	{
 		At -= deltaTime * XMVector4Normalize(Up) * moveSpeed;
 	}
-	else if (inputMouseLocation.diffMouseY < 0)	// ¸¶¿ì½º ÇÏ´Ü ÀÌµ¿
+	else if (inputMouseLocation.diffMouseY < 0)	// ë§ˆìš°ìŠ¤ í•˜ë‹¨ ì´ë™
 	{
 		At += deltaTime * XMVector4Normalize(Up) * moveSpeed;
 	}
@@ -135,7 +135,7 @@ void CameraClass::HandleKeyboardMovement(float deltaTime)
 
 void CameraClass::Update(SystemInputClass* inputClass, std::vector<XMMATRIX> world, float deltaTime)
 {
-	inputClass->GetMouseLocation(inputMouseLocation.diffMouseX, inputMouseLocation.diffMouseY);	// ÇØ´ç °ªÀ» ÅëÇØ view¸¦ rotation ¼öÇàÇÏ¿© ½ÃÁ¡ º¯È¯
+	inputClass->GetMouseLocation(inputMouseLocation.diffMouseX, inputMouseLocation.diffMouseY);	// í•´ë‹¹ ê°’ì„ í†µí•´ viewë¥¼ rotation ìˆ˜í–‰í•˜ì—¬ ì‹œì  ë³€í™˜
 	HandleMouseMovement(deltaTime);
 
 	inputClass->GetFunctionKeyPressed(inputKey[0].key, inputKey[0].isKeyup);

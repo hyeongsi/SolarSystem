@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <Windows.h>
 
 class GameTimer
@@ -19,13 +19,13 @@ private:
 public:
 	GameTimer();
 
-	float TotalTime() const;	// ÃÊ ´ÜÀ§
-	float DeltaTime() const;	// ÃÊ ´ÜÀ§
+	float TotalTime() const;	// ì´ˆ ë‹¨ìœ„
+	float DeltaTime() const;	// ì´ˆ ë‹¨ìœ„
 
-	void Reset();		// ¸Ş½ÃÁö ·çÇÁ ÀÌÀü¿¡ È£ÃâÇØ¾ß ÇÔ
-	void Start();		// Å¸ÀÌ¸Ó ½ÃÀÛ, Àç°³ ½Ã È£ÃâÇØ¾ß ÇÔ
-	void Stop();		// ÀÏ½Ã Á¤Áö ½Ã È£ÃâÇØ¾ß ÇÔ
-	void Tick();		// ¸Å ÇÁ·¹ÀÓ¸¶´Ù È£ÃâÇØ¾ß ÇÔ
+	void Reset();		// ë©”ì‹œì§€ ë£¨í”„ ì´ì „ì— í˜¸ì¶œí•´ì•¼ í•¨
+	void Start();		// íƒ€ì´ë¨¸ ì‹œì‘, ì¬ê°œ ì‹œ í˜¸ì¶œí•´ì•¼ í•¨
+	void Stop();		// ì¼ì‹œ ì •ì§€ ì‹œ í˜¸ì¶œí•´ì•¼ í•¨
+	void Tick();		// ë§¤ í”„ë ˆì„ë§ˆë‹¤ í˜¸ì¶œí•´ì•¼ í•¨
 
 };
 

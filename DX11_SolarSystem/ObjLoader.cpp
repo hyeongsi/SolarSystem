@@ -1,4 +1,4 @@
-#include "ObjLoader.h"
+ï»¿#include "ObjLoader.h"
 #include <fstream>
 
 using namespace std;
@@ -59,11 +59,11 @@ bool ObjLoader::ReadFileCounts(const char* fileName)
 		{
 		case 'v':
 			fin.get(input);
-			if (input == ' ')		// ¹öÅØ½º ÁÂÇ¥
+			if (input == ' ')		// ë²„í…ìŠ¤ ì¢Œí‘œ
 				tempVertexCount++;
-			else if (input == 't')	// ÅØ½ºÃ³ ÁÂÇ¥
+			else if (input == 't')	// í…ìŠ¤ì²˜ ì¢Œí‘œ
 				tempTextureCount++;
-			else if (input == 'n')	// ¹ı¼± ÁÂÇ¥
+			else if (input == 'n')	// ë²•ì„  ì¢Œí‘œ
 				tempNormalCount++;
 			break;
 		case 'f':
@@ -113,24 +113,24 @@ bool ObjLoader::LoadObjVertexData(const char* fileName, VertexType * vertexType,
 		{
 		case 'v':
 			fin.get(input);
-			if (input == ' ')		// ¹öÅØ½º ÁÂÇ¥
+			if (input == ' ')		// ë²„í…ìŠ¤ ì¢Œí‘œ
 			{
 				fin >> vertex.x >> vertex.y >> vertex.z;
-				vertex.z = vertex.z * -1.0f;		// ¿À¸¥¼Õ ÁÂÇ¥°è(obj) -> ¿Ş¼Õ ÁÂÇ¥°è º¯È¯(DX11)
+				vertex.z = vertex.z * -1.0f;		// ì˜¤ë¥¸ì† ì¢Œí‘œê³„(obj) -> ì™¼ì† ì¢Œí‘œê³„ ë³€í™˜(DX11)
 
 				vertices.emplace_back(vertex);
 			}
-			else if (input == 't')	// ÅØ½ºÃ³ ÁÂÇ¥
+			else if (input == 't')	// í…ìŠ¤ì²˜ ì¢Œí‘œ
 			{
 				fin >> texcoord.x >> texcoord.y;
-				texcoord.y = 1.0f - texcoord.y;		// ¿À¸¥¼Õ ÁÂÇ¥°è(obj) -> ¿Ş¼Õ ÁÂÇ¥°è º¯È¯(DX11)
+				texcoord.y = 1.0f - texcoord.y;		// ì˜¤ë¥¸ì† ì¢Œí‘œê³„(obj) -> ì™¼ì† ì¢Œí‘œê³„ ë³€í™˜(DX11)
 
 				texcoords.emplace_back(texcoord);
 			}
-			else if (input == 'n')	// ¹ı¼± ÁÂÇ¥
+			else if (input == 'n')	// ë²•ì„  ì¢Œí‘œ
 			{
 				fin >> normal.x >> normal.y >> normal.z;
-				normal.z = normal.z * -1.0f;		// ¿À¸¥¼Õ ÁÂÇ¥°è(obj) -> ¿Ş¼Õ ÁÂÇ¥°è º¯È¯(DX11)
+				normal.z = normal.z * -1.0f;		// ì˜¤ë¥¸ì† ì¢Œí‘œê³„(obj) -> ì™¼ì† ì¢Œí‘œê³„ ë³€í™˜(DX11)
 
 				normals.emplace_back(normal);
 			}
@@ -156,11 +156,11 @@ bool ObjLoader::LoadObjVertexData(const char* fileName, VertexType * vertexType,
 
 	fin.close();
 
-	// ¹öÅØ½º, ÀÎµ¦½º Á¤º¸ ÀúÀå
+	// ë²„í…ìŠ¤, ì¸ë±ìŠ¤ ì •ë³´ ì €ì¥
 	int count = 0;
 	for (int i = 0; i < faceCount; i++)
 	{
-		// .obj¿¡¼­´Â ÀÎµ¦½ºÀÇ ¹øÈ£°¡ 1ºÎÅÍ ½ÃÀÛÇØ¼­ cpp¿¡ ¸Âµµ·Ï 0ºÎÅÍ ½ÃÀÛÇÒ ¼ö ÀÖµµ·Ï -1 Ã³¸®
+		// .objì—ì„œëŠ” ì¸ë±ìŠ¤ì˜ ë²ˆí˜¸ê°€ 1ë¶€í„° ì‹œì‘í•´ì„œ cppì— ë§ë„ë¡ 0ë¶€í„° ì‹œì‘í•  ìˆ˜ ìˆë„ë¡ -1 ì²˜ë¦¬
 		vertexType[count].pos = vertices[faces[i].vIndex1 - 1];
 		vertexType[count].texture = texcoords[faces[i].tIndex1 - 1];
 		vertexType[count].normal = normals[faces[i].nIndex1 - 1];

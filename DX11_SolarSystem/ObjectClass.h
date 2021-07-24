@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <D3D11.h>
 #include <DirectXMath.h>
 #include <vector>
@@ -17,11 +17,11 @@ private:
     std::vector<XMMATRIX> objectCameraWorld;
 
     std::vector<ConstantBuffer> constantBufferData;
-    std::vector<float> scale;           // Å©±â
-    std::vector<float> rotationAngle;   // ÀÚÀü±â¿ï±â
-    std::vector<float> rotationSpeed;   // ÀÚÀü¼Óµµ
-    std::vector<float> distance;        // °Å¸®
-    std::vector<float> revolutionSpeed; // °øÀü¼Óµµ
+    std::vector<float> scale;           // í¬ê¸°
+    std::vector<float> rotationAngle;   // ìì „ê¸°ìš¸ê¸°
+    std::vector<float> rotationSpeed;   // ìì „ì†ë„
+    std::vector<float> distance;        // ê±°ë¦¬
+    std::vector<float> revolutionSpeed; // ê³µì „ì†ë„
 
     int vertexTypeCount = 0;
     int indexCount = 0;

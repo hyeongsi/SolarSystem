@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 #include <dinput.h>
 
 class SystemInputClass
 {
 private:
-	// direct ÀÔ·Â, Å°º¸µå, ¸¶¿ì½º ÀåÄ¡ ÀÎÅÍÆäÀÌ½º
+	// direct ì…ë ¥, í‚¤ë³´ë“œ, ë§ˆìš°ìŠ¤ ì¥ì¹˜ ì¸í„°í˜ì´ìŠ¤
 	IDirectInput8* m_directInput;
 	IDirectInputDevice8* m_keyboard;
 	IDirectInputDevice8* m_mouse;
@@ -15,7 +15,7 @@ private:
 	int m_screenWidth, m_screenHeight;
 	int m_mouseX, m_mouseY;
 
-	bool m_keys[256];	 // Å° ÀÔ·Â À¯¹« ÀúÀå
+	bool m_keys[256];	 // í‚¤ ì…ë ¥ ìœ ë¬´ ì €ì¥
 	unsigned int moveKey[4];
 
 public:
