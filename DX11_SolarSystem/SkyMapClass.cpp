@@ -170,8 +170,7 @@ void SkyMapClass::Render(CameraClass* cameraClass, GraphicClass* graphicClass)
 	ID3D11RenderTargetView* rendertargetView = graphicClass->GetRenderTargetView();
 	m_pImmediateContext->OMSetRenderTargets(1, &rendertargetView, NULL);
 
-	XMMATRIX mWorld = //XMMatrixScaling(1.0f, 1.0f, 1.0f) * 
-		XMMatrixTranslation(XMVectorGetX(cameraClass->GetCameraEye()), XMVectorGetY(cameraClass->GetCameraEye()), XMVectorGetZ(cameraClass->GetCameraEye()));
+	XMMATRIX mWorld = XMMatrixTranslation(XMVectorGetX(cameraClass->GetCameraEye()), XMVectorGetY(cameraClass->GetCameraEye()), XMVectorGetZ(cameraClass->GetCameraEye()));
 
 	constantBufferData.mWorld = XMMatrixTranspose(mWorld);
 	constantBufferData.mView = XMMatrixTranspose(cameraClass->GetCoordinateConstantBuffer()->mView);

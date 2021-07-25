@@ -221,7 +221,6 @@ HRESULT GraphicClass::InitGraphicClass()
 
 	m_pImmediateContext->IASetInputLayout(m_pVertexLayout);
 
-	// ������� ���� �ȼ����̴�
 	ID3DBlob* pPSBlob = NULL;
 	hr = D3DX11CompileFromFileW(szfileName, NULL, NULL, "PS", "ps_4_0", dwShaderFlags, 0, NULL, &pPSBlob, NULL, NULL);
 	if (FAILED(hr))

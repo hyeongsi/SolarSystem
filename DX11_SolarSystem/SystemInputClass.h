@@ -5,15 +5,15 @@ class SystemInputClass
 {
 private:
 	// direct 입력, 키보드, 마우스 장치 인터페이스
-	IDirectInput8* m_directInput;
-	IDirectInputDevice8* m_keyboard;
-	IDirectInputDevice8* m_mouse;
+	IDirectInput8* m_directInput = NULL;
+	IDirectInputDevice8* m_keyboard = NULL;
+	IDirectInputDevice8* m_mouse = NULL;
 
 	unsigned char m_keyboardState[256];
 	DIMOUSESTATE m_mouseState;
 
-	int m_screenWidth, m_screenHeight;
-	int m_mouseX, m_mouseY;
+	int m_screenWidth = 0, m_screenHeight = 0;
+	int m_mouseX = 0, m_mouseY = 0;
 
 	bool m_keys[256];	 // 키 입력 유무 저장
 	unsigned int moveKey[4];
