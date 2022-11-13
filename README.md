@@ -24,7 +24,7 @@ DX11 학습
 ## 시연 영상
 <details>
   <summary>플레이</summary>
-  <img width="976" src=""/>
+  <img width="976" src="https://user-images.githubusercontent.com/71202869/201512930-fcb662ad-6cd9-419c-82c7-838dcb2dee7c.gif"/>
 </details>
 <br>
 
