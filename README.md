@@ -28,23 +28,27 @@ DX11 학습
 </details>
 <br>
 
-## 기타
-<details>
-  <summary>조작법</summary>
-  <table>
-    <tr>
-      <td><b>방향키</b></td>
-      <td><b>마우스 이동</b></td>
-      <td><b>ESC</b></td>
-    </tr>
-    <tr>
-      <td>이동</td>
-      <td>화면 각도 변경</td>
-      <td>종료</td>
-    </tr>
-  </table>
+## 기타 / 조작법
+<ui>
+  <li>
+    <table>
+      <tr>
+        <td><b>방향키</b></td>
+        <td><b>마우스 이동</b></td>
+        <td><b>ESC</b></td>
+      </tr>
+      <tr>
+        <td>이동</td>
+        <td>화면 각도 변경</td>
+        <td>종료</td>
+      </tr>
+    </table>
+  </li>
+  <li></li>
+</ui>
+  
 </details>
 
 ```
-* 3D를 다루는 것에 중점을 두고 학습을 했으나 아직 많이 미흡함
+* 3D를 다루는 것에 중점을 두고 학습을 했으나 간신히 출력만 하는 단계로 아직 많이 미흡함
 ```
